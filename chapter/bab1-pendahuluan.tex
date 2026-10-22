@@ -4,33 +4,64 @@
 \pagestyle{halamanisi}
 \chapter{Pendahuluan}
 
-\pet{Bagian ini berisi pendahuluan mengenai Praktek Kerja Lapangan (PKL) yang dilaksanakan. Dokumen PKL ditulis dalam font Times New Roman dengan ukuran font 12pt. Margin halaman adalah 3 cm (1.18 in) untuk sisi atas, bawah, \& kanan, dan 3.5 cm (1.38 in) untuk sisi kiri.}
-
 \section{Latar Belakang}
-\pet{Laporan PKL adalah sebuah laporan penelitian yang berhubungan dengan pemecahan masalah (\textit{problem solving}) berkaitan dengan Informatika, yang terjadi pada instansi PKL [1].}
+Salah satu indikator utama dalam menilai tingkat kesejahteraan suatu bangsa adalah kesehatan masyarakat. Pemerintah Indonesia telah mengupayakan berbagai langkah untuk mendukung terwujudnya kesehatan masyarakat yang optimal, salah satunya melalui penyelenggaraan layanan rumah sakit. Di samping itu, pemerintah juga menghadirkan Program Jaminan Kesehatan Nasional (JKN) sebagai bentuk jaminan atas akses layanan kesehatan yang efektif dan efisien bagi seluruh lapisan masyarakat \cite{10}.
 
-\pet{Tuliskanlah latar belakang dari pelaksanaan PKL di perusahaan dan substansi yang digeluti berkaitan dengan tujuan, misi, visi atau fungsi perusahaan. Tuliskan permasalahan terkait dengan apa yang menjadi permasalahan di instansi tersebut, lalu jelaskan solusi untuk mengatasi permasalahan tersebut. Solusi yang ditulis berkaitan dengan ilmu informatika yang telah dipelajari selama kuliah.}
+Program JKN diselenggarakan melalui skema asuransi sosial, dengan tujuan meringankan beban finansial masyarakat yang timbul akibat kebutuhan layanan kesehatan \cite{10}. Penggantian biaya atas layanan kesehatan yang telah diterima masyarakat dilakukan melalui mekanisme pengajuan klaim BPJS oleh pihak rumah sakit \cite{1}. Proses pengajuan klaim tersebut mengharuskan terpenuhinya sejumlah persyaratan, baik dari sisi kelengkapan administrasi maupun ketepatan kode diagnosis dan tindakan medis yang diberikan \cite{1}. Persyaratan ini menjadi acuan untuk memastikan keabsahan proses pembiayaan sekaligus mencegah terjadinya penolakan klaim oleh pihak BPJS Kesehatan. Apabila persyaratan administrasi belum terpenuhi atau terdapat ketidaksesuaian kode diagnosis dan tindakan, maka klaim akan berstatus pending \cite{10}, \cite{14}.
 
-\petb{Jangan menjelaskan tentang latar belakang pelaksanaan mata kuliah Praktek Kerja Lapangan.}
+Ketika klaim BPJS berstatus pending, berkas yang bermasalah akan dikembalikan kepada rumah sakit untuk dilakukan peninjauan ulang \cite{14}. Kondisi pending claim ini umumnya disebabkan oleh sejumlah faktor, di antaranya keterbatasan sumber daya manusia \cite{10}, \cite{14}, kesalahan dalam proses koding \cite{10}, \cite{16}, serta ketidaklengkapan dokumen pendukung klaim \cite{10}, \cite{16}. Permasalahan tersebut berdampak langsung pada terganggunya arus kas rumah sakit, yang pada gilirannya dapat menghambat pembayaran gaji pegawai, kewajiban kepada pemasok, dan alokasi biaya pemeliharaan fasilitas rumah sakit \cite{10}, \cite{14}.
+
+Kondisi ini menunjukkan perlunya analisis lebih mendalam serta langkah penanganan yang tepat guna mengidentifikasi akar permasalahan dan menekan potensi terjadinya pending klaim BPJS Kesehatan.
 
 \section{Rumusan Masalah}
-\pet{Tuliskanlah permasalahan utama apa yang mendasari anda dalam melakukan PKL. Bisa ditulis dalam beberapa poin. Rumusan Masalah akan dijawab di bagian Bab VI Kesimpulan.}
+Dari latar belakang yang telah dijelaskan sebelumnya, maka rumusan masalah pada Praktek Kerja Lapangan ini adalah sebagai berikut:
+\begin{enumerate}
+    \item Bagaimana proses alur administrasi serta faktor-faktor penyebab terjadinya pending claim pada pengajuan klaim BPJS Kesehatan dapat dianalisis?
+    \item Bagaimana rekomendasi sistem yang mampu meminimalisir risiko terjadinya pending claim pada pengajuan klaim BPJS Kesehatan dapat dirancang?
+\end{enumerate}
 
 \section{Tujuan}
-\pet{Tuliskanlah tujuan dari penyelesaian permasalahan bukan tujuan PKL seperti ditulis kurikulum. Tujuan harus selaras dengan Rumusan Masalah dan akan berkaitan dengan Kesimpulan.}
+Adapun tujuan dari Praktek Kerja Lapangan ini adalah sebagai berikut:
+\begin{enumerate}
+    \item Menganalisis alur administrasi, faktor-faktor penyebab, dan potensi terjadinya pending claim pada pengajuan klaim BPJS Kesehatan.
+    \item Merancang rekomendasi sistem untuk meminimalisir risiko terjadinya pending claim pada pengajuan klaim BPJS Kesehatan.
+\end{enumerate}
 
 \section{Manfaat}
-\pet{Tuliskanlah manfaat anda melaksanakan PKL dan dalam menyelesaikan permasalahan di tempat kerja praktek, untuk secara pribadi, prodi Teknik Informatika, dan instansi tempat bekerja.}
+\subsection{Bagi Mahasiswa}
+\begin{enumerate}
+    \item Memperoleh wadah untuk mengimplementasikan ilmu yang telah diperoleh selama menempuh perkuliahan.
+    \item Memperoleh gambaran mengenai kondisi lingkungan kerja pada instansi/perusahaan tempat pelaksanaan PKL.
+    \item Menumbuhkan sikap tanggung jawab serta kedisiplinan pada diri mahasiswa.
+    \item Membentuk dan mengasah sikap maupun pola pikir profesional sebagai bekal sebelum memasuki dunia kerja yang sesungguhnya.
+\end{enumerate}
+
+\subsection{Bagi Prodi Teknik Informatika}
+\begin{enumerate}
+    \item Menjadi bahan masukan dalam evaluasi bidang akademik guna peningkatan dan pengembangan mutu pendidikan.
+    \item Mencetak lulusan Program Studi Teknik Informatika yang memiliki kompetensi sesuai dengan kebutuhan dunia kerja.
+\end{enumerate}
+
+\subsection{Bagi Instansi}
+\begin{enumerate}
+    \item Berkontribusi dalam mendukung terciptanya sumber daya manusia yang kompeten di dunia kerja.
+    \item Menjalin pertukaran informasi di bidang teknologi antara pihak instansi dengan mahasiswa pelaksana PKL.
+\end{enumerate}
 
 \section{Ruang Lingkup}
-\pet{Tuliskanlah ruang lingkup dan batasan untuk permasalahan dan penyelesaian anda. Jika anda bekerja dalam tim maka tuliskan juga ruang lingkup kerja praktek anda sebagai bagian dari tim.}
+Adapun ruang lingkup analisis dan penanganan dari permasalahan yang diangkat pada laporan ini adalah sebagai berikut.
+\begin{enumerate}
+    \item Pengamatan dan analisis dititikberatkan pada alur administrasi dokumen pengajuan klaim BPJS Kesehatan.
+    \item Laporan ini terbatas pada tahap identifikasi masalah administratif dan perancangan rekomendasi sistem, serta tidak mencakup tahap implementasi secara penuh maupun pengujian langsung pada lingkungan rumah sakit.
+    \item Data dan alur administrasi yang dianalisis mengacu pada hasil studi literatur serta arahan yang diberikan oleh pembimbing lapangan perusahaan.
+\end{enumerate}
 
 \section{Sistematika Penulisan}
-\pet{Tuliskan sistematika substansi dari draft laporan kerja praktek anda, dimulai dari Bab I s.d Bab VI termasuk cakupan dari setiap Bab yang dituliskan.}
+Kegiatan yang dilakukan untuk menyelesaikan Praktik Kerja Lapangan ini adalah identifikasi masalah, menentukan tujuan, melakukan studi literatur, pengumpulan data, analisis serta evaluasi. Seluruh kegiatan tersebut didokumentasikan dalam sistematika penulisan sebagai berikut.
 
-\butirbab{Bab I Pendahuluan}{Jelaskan apa yang tertulis pada Bab I sesuai dengan topik penelitian}
-\butirbab{Bab II Gambaran Umum Instansi}{Jelaskan apa yang tertulis pada Bab II sesuai dengan topik penelitian}
-\butirbab{Bab III Landasan Teori}{Jelaskan apa yang tertulis pada Bab III sesuai dengan topik penelitian}
-\butirbab{Bab IV Metode Penelitian}{Jelaskan apa yang tertulis pada Bab IV sesuai dengan topik penelitian}
-\butirbab{Bab V Hasil Implementasi}{Jelaskan apa yang tertulis pada Bab V sesuai dengan topik penelitian}
-\butirbab{Bab VI Kesimpulan dan Saran}{Jelaskan apa yang tertulis pada Bab VI sesuai dengan topik penelitian}
+\butirbab{Bab I Pendahuluan}{Bab ini memuat latar belakang pelaksanaan kegiatan, rumusan masalah, tujuan, manfaat, ruang lingkup beserta batasannya, dan sistematika penulisan laporan PKL.}
+\butirbab{Bab II Gambaran Umum Instansi}{Bab ini berfungsi sebagai pembuka yang memperkenalkan instansi tempat PKL dilaksanakan. Isinya mencakup sejarah singkat, visi dan misi, serta struktur organisasi instansi.}
+\butirbab{Bab III Landasan Teori}{Bab ini menguraikan teori-teori yang menjadi dasar penyusunan laporan PKL. Teori tersebut dirujuk dari buku, jurnal, regulasi, maupun standar yang relevan.}
+\butirbab{Bab IV Metode Penelitian}{Bab ini menjabarkan pelaksanaan PKL, meliputi gambaran permasalahan yang dihadapi, tahapan penyelesaiannya, serta metode yang dipakai.}
+\butirbab{Bab V Hasil Implementasi}{Bab ini menyajikan hasil analisis dan perancangan, serta pembahasan mengenai sejauh mana tujuan tercapai, dengan merujuk pada teori dan penelitian terdahulu.}
+\butirbab{Bab VI Kesimpulan dan Saran}{Bab ini berisi kesimpulan sebagai jawaban atas rumusan masalah yang telah ditetapkan, serta saran-saran yang berkaitan dengan isi laporan.}

@@ -1,14 +1,10 @@
 %==============================================================================
 % ABSTRAK
-% [Constraints]:
-% - Maksimal 250 kata & wajib tepat dalam 1 halaman
-% - Bahasa Indonesia yang baik dan benar
-% - Memuat: lingkup PKL (termasuk nama perusahaan), masalah instansi, pelaksanaan/hasil,
-%   kesimpulan umum, dan kata kunci
 %==============================================================================
 \chapter*{ABSTRAK}
 \addcontentsline{toc}{chapter}{ABSTRAK}
 
-\noindent\pet{Tuliskan ringkasan laporan Kerja Praktek, yang merupakan ringkasan dari lingkup kerja praktek (termasuk nama perusahaan, penjelasan singkat terkait permasalahan di instansi, pelaksanaan kerja praktek (proses dan pencapaian hasil), kesimpulan umum mengenai kerja praktek yang telah dilakukan dan kata kunci, dalam Bahasa Indonesia. (\petb{dituliskan dalam maksimal 250 kata \& hanya dalam 1 halaman}).}
+Kerja Praktek ini dilaksanakan di P.T. Bangga Teknologi Produktif (Karla Bionics) yang merupakan hasil riset dan pengabdian masyarakat oleh akademisi Institut Teknologi Bandung (ITB), memposisikan diri sebagai penggerak inovasi sosial yang menekankan keberlanjutan dan dialog dengan para pihak berkepentingan, sehingga setiap solusi yang dihasilkan sesuai dengan kebutuhan masyarakat. Karla Bionics ingin berkontribusi pada transformasi digital layanan kesehatan dengan mendukung mitra rumah sakit penyelenggara Program Jaminan Kesehatan Nasional (JKN) BPJS Kesehatan, yang menghadapi permasalahan klaim sering berstatus pending akibat ketidaktepatan pemberian kode diagnosis (ICD-10) dan prosedur (ICD-9-CM). Kondisi tersebut menunda pembayaran klaim, mengganggu arus kas rumah sakit, dan menambah beban kerja petugas koding, proses koding yang masih manual dan bergantung pada pengalaman petugas juga membuat hasilnya kurang konsisten. Untuk menjawab permasalahan tersebut, sistem pendukung keputusan berbasis web bernama INA-CBG Coding Assistant dikembangkan untuk membantu petugas koding mengunggah resume medis, mengekstraksi teks dokumen melalui parsing lokal dengan fallback OCR berbasis kecerdasan buatan, memperoleh rekomendasi kode ICD-10 dan ICD-9-CM beserta bukti pendukung dan tingkat keyakinannya, mengambil keputusan terhadap kode tersebut (konfirmasi, tolak, atau tambah manual), serta menghitung estimasi grup dan tarif INA-CBG. Sistem dibangun dengan backend FastAPI, worker Celery melalui antrian Redis, basis data PostgreSQL, penyimpanan berkas Cloudflare R2, dan integrasi Google Gemini yang dilengkapi mekanisme auto-failover ke OpenRouter. Sistem juga menyembunyikan identitas pasien sebelum data dikirim ke penyedia AI eksternal dan mencatat seluruh aktivitas penting pada log audit. Hasil pengujian blackbox menunjukkan seluruh skenario uji berjalan dan lulus.
 
-\noindent\pet{Kata kunci: …}
+\vspace{12pt}
+\noindent Kata kunci: pending klaim, koding medis, ICD-10, INA-CBG, sistem pendukung keputusan
