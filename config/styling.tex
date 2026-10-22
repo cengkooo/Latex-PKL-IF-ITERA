@@ -26,13 +26,13 @@
 
 \titleformat{\section}[hang]
   {\normalfont\bfseries\spasisetengah}
-  {\thesection.}{0.5em}{}
-\titlespacing*{\section}{0.635cm}{3pt}{3pt}
+  {\makebox[1.27cm][l]{\thesection.}}{0pt}{}
+\titlespacing*{\section}{0pt}{3pt}{3pt}
 
 \titleformat{\subsection}[hang]
   {\normalfont\bfseries\spasisetengah}
-  {\thesubsection.}{0.5em}{}
-\titlespacing*{\subsection}{0.95cm}{12pt}{3pt}
+  {\makebox[1.27cm][l]{\thesubsection.}}{0pt}{}
+\titlespacing*{\subsection}{0pt}{12pt}{3pt}
 
 % Judul halaman khusus (misal: lembar pengesahan, daftar lain-lain)
 \newcommand{\judulhal}[1]{%
