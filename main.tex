@@ -1,0 +1,60 @@
+% !TEX program = D:\LaTex\miktex\bin\x64\xelatex.exe
+%==============================================================================
+% LAPORAN PRAKTEK KERJA LAPANGAN (PKL)
+% Program Studi Teknik Informatika, Institut Teknologi Sumatera
+% Padanan LaTeX dari T1-Template_Laporan_PKL.docx
+%
+% Compile : xelatex main.tex  (jalankan 2x supaya Daftar Isi terisi sempurna)
+% Font    : Times New Roman (otomatis fallback ke TeX Gyre Termes)
+%==============================================================================
+
+\documentclass[12pt,a4paper]{report}
+
+%==============================================================================
+% 1. KONFIGURASI TEMPLATE & CONSTRAINTS (CONFIG)
+%==============================================================================
+% Paket LaTeX, layout, styling, metadata, dan constraints disimpan terpisah di /config:
+% - config/packages.tex   : Daftar package yang digunakan
+% - config/layout.tex     : Pengaturan font, margin halaman, spasi, dan indentasi
+% - config/styling.tex    : Format penomoran bab/section, caption, TOC, dan header-footer
+% - config/metadata.tex   : Data judul, nama mahasiswa, NIM, instansi, & pembimbing
+% - config/constraints.tex: Custom macro helper & ringkasan constraints resmi PKL ITERA
+
+\input{config/config.tex}
+
+%==============================================================================
+% 2. DOKUMEN UTAMA
+%==============================================================================
+\begin{document}
+
+%------------------------------------------------------------------------------
+% BAGIAN AWAL (FRONT MATTER)
+%------------------------------------------------------------------------------
+\input{chapter/cover.tex}
+\input{chapter/pengesahan-prodi.tex}
+\input{chapter/pengesahan-instansi.tex}
+\input{chapter/abstrak.tex}
+\input{chapter/kata-pengantar.tex}
+\input{chapter/daftar-isi.tex}
+\input{chapter/daftar-lain.tex}
+
+%------------------------------------------------------------------------------
+% BAGIAN ISI UTAMA (MAIN BODY CHAPTERS)
+%------------------------------------------------------------------------------
+\input{chapter/bab1-pendahuluan.tex}
+\input{chapter/bab2-gambaran-umum.tex}
+\input{chapter/bab3-landasan-teori.tex}
+\input{chapter/bab4-metode-penelitian.tex}
+\input{chapter/bab5-hasil-implementasi.tex}
+\input{chapter/bab6-kesimpulan-saran.tex}
+
+%------------------------------------------------------------------------------
+% BAGIAN AKHIR & LAMPIRAN (BACK MATTER & APPENDICES)
+%------------------------------------------------------------------------------
+\input{chapter/referensi.tex}
+\input{chapter/lampiran-a.tex}
+\input{chapter/lampiran-b.tex}
+\input{chapter/lampiran-c.tex}
+\input{chapter/lampiran-d.tex}
+
+\end{document}

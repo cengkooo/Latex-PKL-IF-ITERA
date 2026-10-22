@@ -1,0 +1,95 @@
+%==============================================================================
+% CONFIG: CONSTRAINTS, RULES, & MACROS HELPER
+% Program Studi Teknik Informatika, Institut Teknologi Sumatera
+%==============================================================================
+
+%------------------------------------------------------------------------------
+% MACRO / HELPER PERINTAH FORMAT
+%------------------------------------------------------------------------------
+
+% Petunjuk template (cetak miring / tebal miring)
+\newcommand{\pet}[1]{\textit{#1}}
+\newcommand{\petb}[1]{\textbf{\textit{#1}}}
+
+% Butir bab pada Sistematika Penulisan (Bab I)
+% Format: bullet + judul bab tebal, lalu deskripsi isi miring
+\newcommand{\butirbab}[2]{%
+  \begin{itemize}[leftmargin=0.635cm,labelwidth=0.635cm,labelsep=0pt,align=left,
+                  label=\textbullet,itemsep=0pt,topsep=0pt,parsep=0pt]
+    \item \textbf{#1}
+  \end{itemize}
+  \noindent\pet{#2}\par}
+
+% Pengaturan awal halaman Lampiran
+% Penomoran: <Huruf>-1, <Huruf>-2, dll. (contoh: A-1, B-1)
+% Gambar/Tabel: <Huruf>.1, <Huruf>.2, dll. (contoh: Gambar D.1.)
+\newcommand{\mulailampiran}[1]{%
+  \clearpage
+  \renewcommand{\thepage}{#1-\arabic{page}}%
+  \setcounter{page}{1}%
+  \renewcommand{\thefigure}{#1.\arabic{figure}}%
+  \renewcommand{\thetable}{#1.\arabic{table}}%
+  \setcounter{figure}{0}\setcounter{table}{0}%
+  \thispagestyle{plain}%
+}
+
+% Judul halaman Lampiran
+\newcommand{\judullampiran}[2]{%
+  \addcontentsline{toc}{chapter}{Lampiran #1. #2}%
+  \begingroup\centering\bfseries Lampiran #1. #2\par\endgroup\vspace{12pt}}
+
+%------------------------------------------------------------------------------
+% RINGKASAN ATURAN & CONSTRAINTS TEMPLATE LAPORAN PKL (REFERENSI RESMI)
+%------------------------------------------------------------------------------
+% 1. TIPOGRAFI & MARGIN:
+%    - Font Utama   : Times New Roman, 12 pt.
+%    - Margin Kertas: Top 3 cm, Bottom 3 cm, Right 3 cm, Left 3.5 cm (A4).
+%    - Spasi        : 1.5 spasi (skala baselineskip 1.43, setara Microsoft Word).
+%    - Indentasi    : First-line indent 1.27 cm (720 twips).
+%    - Par-spacing  : Space after paragraph 10 pt (200 twips).
+%
+% 2. COVER (Halaman Sampul):
+%    - Judul TA/PKL : HURUF KAPITAL (ALL CAPS), Bold, 16 pt, MAKSIMAL 3 BARIS.
+%    - Logo         : Wajib memuat Logo Resmi ITERA.
+%
+% 3. LEMBAR PENGESAHAN:
+%    - Lembar Pengesahan Prodi ITERA: tanda tangan Dosen Pembimbing PKL & NIP.
+%    - Lembar Pengesahan Instansi   : tanda tangan Pembimbing Lapangan/Penanggung Jawab, cap instansi.
+%
+% 4. ABSTRAK:
+%    - Bahasa       : Bahasa Indonesia baku.
+%    - Panjang      : Maksimal 250 kata, WAJIB tepat dalam 1 halaman.
+%    - Isi wajib    : Ringkasan lingkup PKL (termasuk nama perusahaan), masalah instansi,
+%                     pelaksanaan/proses, kesimpulan umum, dan kata kunci (keywords).
+%
+% 5. DAFTAR GAMBAR & DAFTAR TABEL:
+%    - Jika hanya ada 1 gambar atau 1 tabel di seluruh laporan, TIDAK PERLU dibuatkan daftar.
+%    - Jika ada, masing-masing diletakkan pada halaman terpisah.
+%
+% 6. BAB ISI:
+%    - Bab I        : Latar Belakang DILARANG membahas alasan kurikuler mata kuliah PKL.
+%                     Fokus pada problem-solving informatika di instansi.
+%                     Rumusan Masalah WAJIB dijawab tuntas pada Bab VI Kesimpulan.
+%    - Bab II       : Wajib menyertakan Gambar Logo Perusahaan.
+%                     Diagram Struktur Organisasi WAJIB diberi highlight (shading/garis putus)
+%                     pada posisi/divisi tim PKL. Durasi PKL wajib 25 s.d. 40 hari kerja.
+%    - Bab III      : DILARANG mengutip dari Wikipedia, koran, portal berita non-ilmiah.
+%                     Wajib dari jurnal, buku, prosiding ilmiah.
+%    - Bab IV       : Menguraikan analisis masalah, alur penyelesaian (flowchart), gambaran sistem,
+%                     alat & bahan, serta metodologi pengembangan.
+%    - Bab V        : Menyajikan hasil implementasi dan pengujian seluruh fitur dari Bab IV,
+%                     serta evaluasi/analisis presentasi di instansi.
+%    - Bab VI       : Kesimpulan wajib menjawab semua rumusan masalah & tujuan. Saran pengembangan.
+%
+% 7. REFERENSI (DAFTAR PUSTAKA):
+%    - Gaya sitasi  : Gaya IEEE (nomor siku [1], [2], dst.).
+%    - Pengurutan   : Diurutkan secara alfabetis berdasarkan nama pengarang.
+%    - Kuota Sumber : MINIMAL 10 referensi, MAKSIMAL 3 referensi website (sisanya jurnal/buku).
+%
+% 8. LAMPIRAN:
+%    - Lampiran A   : TOR (Term of Reference) - Wajib, ditandatangani 3 pihak.
+%    - Lampiran B   : Log Sheet (Form KP2) bertanda tangan & cap resmi instansi.
+%    - Lampiran C   : Dokumen Teknik (SRS, manual book, source code). Jika confidential,
+%                     wajib diganti surat pernyataan resmi bertanda tangan dari perusahaan.
+%    - Lampiran D   : Dokumentasi Kegiatan - Wajib ada dokumentasi foto per minggunya.
+%------------------------------------------------------------------------------

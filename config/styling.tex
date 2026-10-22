@@ -1,0 +1,96 @@
+%==============================================================================
+% CONFIG: STYLING (HEADING, PENOMORAN, HEADER-FOOTER, TOC, CAPTION, LIST)
+%==============================================================================
+
+%------------------------------------------------------------------------------
+% PENOMORAN: Bab (I, II, ...), subbab 1.1., sub-subbab 1.1.1.
+%------------------------------------------------------------------------------
+\renewcommand{\thechapter}{\Roman{chapter}}
+\renewcommand{\thesection}{\arabic{chapter}.\arabic{section}}
+\renewcommand{\thesubsection}{\arabic{chapter}.\arabic{section}.\arabic{subsection}}
+\renewcommand{\thefigure}{\arabic{chapter}.\arabic{figure}}
+\renewcommand{\thetable}{\arabic{chapter}.\arabic{table}}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+
+%------------------------------------------------------------------------------
+% HEADING FORMAT
+%   Heading 1 (Chapter): rata tengah, tebal, "Bab I" lalu nama bab di baris baru
+%   Heading 2 (Section): tebal, nomor 1.1.
+%   Heading 3 (Subsection): tebal, nomor 1.1.1.
+%------------------------------------------------------------------------------
+\titleformat{\chapter}[display]
+  {\normalfont\bfseries\centering\spasisetengah}
+  {Bab \thechapter}{0pt}{}
+\titlespacing*{\chapter}{0pt}{0pt}{12pt}
+
+\titleformat{\section}[hang]
+  {\normalfont\bfseries\spasisetengah}
+  {\thesection.}{0.5em}{}
+\titlespacing*{\section}{0.635cm}{3pt}{3pt}
+
+\titleformat{\subsection}[hang]
+  {\normalfont\bfseries\spasisetengah}
+  {\thesubsection.}{0.5em}{}
+\titlespacing*{\subsection}{0.95cm}{12pt}{3pt}
+
+% Judul halaman khusus (misal: lembar pengesahan, daftar lain-lain)
+\newcommand{\judulhal}[1]{%
+  \begingroup\centering\bfseries #1\par\endgroup\vspace{3pt}}
+
+%------------------------------------------------------------------------------
+% NOMOR HALAMAN (PAGINATION)
+%   Halaman pertama bab/lampiran : bottom center
+%   Halaman berikutnya           : top right
+%------------------------------------------------------------------------------
+\fancypagestyle{halamanisi}{%
+  \fancyhf{}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+  \fancyhead[R]{\thepage}%
+}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+  \fancyfoot[C]{\thepage}%
+}
+
+\pagestyle{halamanisi}
+
+%------------------------------------------------------------------------------
+% CAPTION: Tabel di atas tabel, Gambar di bawah gambar, format <bab>.<urutan>
+%------------------------------------------------------------------------------
+\captionsetup{labelsep=period,justification=centering,singlelinecheck=true,
+              font=normalsize,labelfont=normalfont}
+\captionsetup[table]{position=above,skip=6pt}
+\captionsetup[figure]{position=below,skip=6pt}
+
+%------------------------------------------------------------------------------
+% DAFTAR ISI (TOC) DENGAN TOCLOFT
+%------------------------------------------------------------------------------
+\renewcommand{\cfttoctitlefont}{\bfseries}
+\renewcommand{\cftaftertoctitle}{}
+\renewcommand{\cftchapfont}{\bfseries}
+\renewcommand{\cftchappagefont}{\bfseries}
+\renewcommand{\cftchappresnum}{Bab }
+\renewcommand{\cftdotsep}{0.6}   % Titik leader rapat
+\renewcommand{\cftchapleader}{\bfseries\cftdotfill{\cftdotsep}}
+\setlength{\cftchapnumwidth}{3.4em}
+\setlength{\cftbeforechapskip}{3pt}
+\setlength{\cftbeforesecskip}{3pt}
+\setlength{\cftbeforesubsecskip}{3pt}
+\setlength{\cftsecindent}{0.635cm}
+\setlength{\cftsecnumwidth}{1.0cm}
+\renewcommand{\cftsecaftersnum}{.}
+\setlength{\cftsubsecindent}{1.27cm}
+\setlength{\cftsubsecnumwidth}{1.3cm}
+\renewcommand{\cftsubsecaftersnum}{.}
+
+%------------------------------------------------------------------------------
+% LIST / PENOMORAN ITEM
+%------------------------------------------------------------------------------
+\setlist{nosep}
+\setlist[enumerate]{leftmargin=1.27cm,labelwidth=0.635cm,labelsep=0pt,align=left,
+                    itemsep=0pt,topsep=0pt,parsep=0pt}

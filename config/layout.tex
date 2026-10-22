@@ -1,0 +1,27 @@
+%==============================================================================
+% CONFIG: LAYOUT, TIPOGRAFI, DAN SPASI
+%==============================================================================
+
+% Font: Times New Roman (fallback ke TeX Gyre Termes bila font sistem belum terpasang)
+\IfFontExistsTF{Times New Roman}{%
+  \setmainfont{Times New Roman}%
+}{%
+  \setmainfont{TeX Gyre Termes}%
+}
+
+% Tipografi: Times New Roman 12 pt, rata kiri-kanan, spasi 1,5 (setara Microsoft Word)
+%   Word "1.5 lines" TNR 12 pt = 20,7 pt  ->  skala 1,43 dari baselineskip LaTeX
+%   Word "single"     TNR 12 pt = 13,8 pt  ->  skala 0,952
+\newcommand{\spasisatu}{\setstretch{0.952}}
+\newcommand{\spasisetengah}{\setstretch{1.43}}
+\AtBeginDocument{\spasisetengah}
+
+% Indentasi & spasi antar paragraf
+\setlength{\parindent}{1.27cm}   % First-line indent 720 twips (1,27 cm)
+\setlength{\parskip}{10pt}       % Spacing after paragraf 200 twips (10 pt)
+\setlength{\emergencystretch}{2em}
+
+% Label penamaan bahasa Indonesia
+\renewcommand{\figurename}{Gambar}
+\renewcommand{\tablename}{Tabel}
+\renewcommand{\contentsname}{Daftar Isi}
