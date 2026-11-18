@@ -203,7 +203,7 @@ F-15 & Indikator Koneksi Layanan & Sistem menyediakan \textit{endpoint health ch
 
 \subsubsection{Kebutuhan Non-Fungsional}
 \begin{small}
-\begin{longtable}{|c|>{\raggedright\arraybackslash}p{3.6cm}|>{\raggedright\arraybackslash}p{7.9cm}|}
+\begin{longtable}{|c|>{\raggedright\arraybackslash}p{3.8cm}|>{\raggedright\arraybackslash}p{7.7cm}|}
 \caption{Tabel Kebutuhan Non-Fungsional}\label{tab:kebutuhan-non-fungsional}\\
 \hline
 \textbf{ID} & \textbf{Kategori} & \textbf{Deskripsi Kebutuhan} \\
@@ -215,15 +215,10 @@ F-15 & Indikator Koneksi Layanan & Sistem menyediakan \textit{endpoint health ch
 \endhead
 \hline
 \endfoot
-NF-01 & Functional Suitability (Kesesuaian Fungsional) & Sistem menyediakan seluruh fungsi yang dibutuhkan proses koding klaim mulai dari unggah dokumen, rekomendasi kode ICD-10/ICD-9-CM, keputusan koding, hingga perhitungan grouper dengan keluaran yang akurat dan lengkap sesuai spesifikasi kebutuhan. \\ \hline
-NF-02 & Performance Efficiency (Efisiensi Kinerja) & Proses berat (ekstraksi dokumen dan analisis AI) dijalankan secara asinkron agar API tetap responsif, dengan batas waktu (\textit{time limit}) pada tugas \textit{worker} sehingga kinerja sistem tetap terjaga. \\ \hline
-NF-03 & Compatibility (Kompatibilitas) & Sistem berbasis web dapat diakses melalui peramban modern pada berbagai perangkat tanpa instalasi tambahan, serta mendukung penyimpanan berkas yang kompatibel dengan API S3. \\ \hline
-NF-04 & Interaction Capability / Usability (Kemampuan Interaksi / Ketergunaan) & Antarmuka berbahasa Indonesia yang sederhana dan mudah dipelajari, dengan indikator status proses (\textit{pending}, \textit{processing}, \textit{completed}, \textit{failed}) yang jelas bagi pengguna. \\ \hline
-NF-05 & Reliability (Keandalan) & Sistem menyediakan mekanisme \textit{auto-failover} penyedia AI, \textit{retry} tugas Celery, serta penanganan kegagalan dokumen melalui fitur \textit{retry} sehingga layanan tetap berjalan saat terjadi gangguan. \\ \hline
-NF-06 & Security (Keamanan) & Sistem menerapkan autentikasi JWT dan otorisasi berbasis peran pada seluruh \textit{endpoint} sensitif, serta meredaksi PII sebelum data dikirim ke penyedia AI eksternal sesuai prinsip perlindungan data kesehatan. \\ \hline
-NF-07 & Maintainability (Kemudahan Pemeliharaan) & Sistem dibangun secara modular (\textit{router}, \textit{service}, \textit{model} terpisah) dengan dokumentasi API otomatis (Swagger) dan pengujian otomatis, sehingga mudah diperbaiki dan dikembangkan. \\ \hline
-NF-08 & Flexibility / Portability (Fleksibilitas / Portabilitas) & Sistem dapat dijalankan pada berbagai lingkungan (lokal maupun \textit{cloud}) dan mudah berpindah penyedia layanan, karena basis data, antrian, penyimpanan objek, serta penyedia AI dapat dikonfigurasi melalui variabel lingkungan. \\ \hline
-NF-09 & Safety (Keselamatan) & Sistem menerapkan prinsip \textit{human-in-the-loop}, yakni rekomendasi AI tidak langsung dipakai sebagai keputusan final melainkan harus dikonfirmasi petugas koding, serta menampilkan peringatan eksplisit ketika tarif belum valid agar tidak menimbulkan kesalahan klaim. \\ \hline
+NF-01 & Security \& Data Privacy (Keamanan dan Privasi Data) & Sistem menerapkan autentikasi berbasis JSON Web Token (JWT), kontrol akses berbasis peran (Role-Based Access Control/RBAC) pada setiap endpoint sensitif, serta melakukan redaksi identitas pribadi pasien (Personally Identifiable Information/PII) sebelum data dikirim ke penyedia AI eksternal selaras dengan prinsip UU Perlindungan Data Pribadi No. 27 Tahun 2022. \\ \hline
+NF-02 & Performance Efficiency (Efisiensi Kinerja \& Responsivitas) & Pemrosesan komputasi berat (ekstraksi dokumen dan inferensi AI) dijalankan secara asinkron menggunakan antrean Celery dan Redis sehingga antarmuka dan layanan API utama tetap responsif dengan waktu tanggap awal di bawah 1 detik tanpa mengalami pembekuan proses. \\ \hline
+NF-03 & Reliability \& Fault Tolerance (Keandalan \& Ketahanan Sistem) & Sistem menjamin kelangsungan layanan dengan menerapkan mekanisme auto-failover antar penyedia model AI (Google Gemini beralih ke penyedia cadangan OpenRouter saat terjadi galat transien), penanganan batas waktu tugas (task time limit), serta fitur percobaan ulang (retry) otomatis pada antrean tugas yang gagal. \\ \hline
+NF-04 & Safety \& Clinical Guardrail (Keselamatan Keputusan Klinis) & Sistem menerapkan prinsip human-in-the-loop di mana rekomendasi AI tidak menjadi keputusan final melainkan memerlukan konfirmasi petugas koding, serta menyediakan perlindungan kalkulasi tarif melalui mekanisme penandaan status aman X-UNMAPPED bertarif Rp0 guna mencegah galat pengajuan klaim. \\ \hline
 \end{longtable}
 \end{small}
 
@@ -394,7 +389,7 @@ Siklus \textit{sprint} ketiga dilaksanakan pada hari ke-23 sampai hari ke-32 (22
 \begin{enumerate}
   \item Terpilihnya konsep sistem pendukung keputusan (\textit{decision support system}) berbasis kecerdasan buatan sebagai solusi utama untuk membantu petugas koding;
   \item Ditetapkannya tumpukan teknologi (\textit{tech stack}) yang mencakup FastAPI sebagai \textit{backend}, React sebagai \textit{frontend}, Celery dan Redis untuk antrean tugas asinkron, Supabase PostgreSQL sebagai basis data, Cloudflare R2 untuk penyimpanan berkas, dan model bahasa besar Google Gemini dengan \textit{fallback} OpenRouter;
-  \item Tersusunnya dokumen spesifikasi kebutuhan perangkat lunak yang mencakup 15 kebutuhan fungsional dan 9 kebutuhan non-fungsional;
+  \item Tersusunnya dokumen spesifikasi kebutuhan perangkat lunak yang mencakup 15 kebutuhan fungsional dan 4 kebutuhan non-fungsional;
   \item Terdokumentasikannya rancangan arsitektur sistem, diagram \textit{use case}, \textit{activity diagram}, serta \textit{sequence diagram} sebagai acuan implementasi.
 \end{enumerate}
 
