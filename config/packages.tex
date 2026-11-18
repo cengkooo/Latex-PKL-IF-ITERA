@@ -8,12 +8,13 @@
 % Spasi dan geometri halaman
 \usepackage{setspace}
 \usepackage[a4paper,top=3cm,bottom=3cm,right=3cm,left=3.5cm,
-            headheight=14pt,headsep=1.2cm,footskip=1.5cm]{geometry}
+            headheight=16pt,headsep=1.2cm,footskip=1.5cm]{geometry}
 
 % Grafis dan tabel
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{array}
+\usepackage{longtable}
 
 % Format paragraf, list, dan penomoran
 \usepackage{indentfirst}  % Paragraf pertama setelah heading tetap menjorok 1,27 cm
@@ -25,5 +26,10 @@
 \usepackage{tocloft}
 \usepackage{caption}
 
-% Hyperlink
+% Hyperlink dan pemenggal URL
+\usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
+
+% Diagram alir dan grafis vektor (TikZ)
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, calc}

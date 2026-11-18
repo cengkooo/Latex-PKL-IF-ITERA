@@ -3,10 +3,246 @@
 %==============================================================================
 \chapter{Hasil Implementasi}
 
-\pet{Tuliskan bagaimana hasil dari implementasi dari perangkat lunak, perangkat keras, sistem, atau prototype yang anda kembangkan. Sertakan juga lingkup implementasi anda dalam merancang perangkat lunak, perangkat keras, sistem, atau prototype.}
-
 \section{Hasil Implementasi}
-\pet{Tuliskan hasil dari proses pengembangan. Tuliskan hasil pengujian dari semua fitur-fitur yang sudah dirancang pada bab IV berdasarkan metodologi yang digunakan selama menyelesaikan dan mengembangkan perangkat lunak, keras, sistem, atau prototype.}
+Proses pengembangan sistem INA-CBG Coding Assistant menghasilkan sebuah aplikasi web yang dirancang untuk mendukung proses koding klaim INA-CBG secara lebih terstruktur dan efisien. Implementasi sistem dilakukan secara iteratif dengan membagi fungsionalitas ke dalam beberapa komponen utama, yaitu backend FastAPI sebagai penyedia layanan API dan pengelola logika bisnis, worker Celery sebagai komponen pemrosesan tugas dengan kemampuan AI Gemini, serta frontend React sebagai antarmuka interaksi pengguna. Fokus implementasi mencakup pembangunan layanan API untuk pengelolaan data dan proses koding klaim, penerapan mekanisme background processing menggunakan Celery untuk menangani tugas pemrosesan dokumen atau diagnosis pasien oleh dokter, serta pengembangan antarmuka web yang memungkinkan pengguna melakukan proses koding dan memantau hasil pemrosesan. Pemisahan komponen frontend, backend, dan worker diterapkan untuk meningkatkan modularitas, fleksibilitas, serta kemudahan pengembangan dan pemeliharaan sistem, sehingga setiap komponen dapat dikembangkan dan dikelola secara independen namun tetap terintegrasi dalam satu alur proses.
+
+Secara garis besar, implementasi INA-CBG Coding Assistant telah mencakup komponen utama yang mendukung keseluruhan alur sistem, mulai dari interaksi pengguna melalui frontend, komunikasi data melalui API, hingga pemrosesan tugas oleh worker. Hasil implementasi setiap modul selanjutnya menjadi dasar dalam proses integrasi dan pengujian sistem secara keseluruhan.
+
+\subsection{Implementasi Pemodelan Basis Data}
+Implementasi basis data sistem INA-CBG Coding Assistant dibangun menggunakan PostgreSQL dengan pendekatan \textit{Object-Relational Mapping} (ORM) melalui pustaka SQLAlchemy serta dikelola secara terstruktur dengan alat migrasi skema Alembic. Entitas utama yang menangani seluruh transaksi proses koding medis adalah tabel claims.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13.5cm]{figure/frontend/5.1.1_Frontend_Pemodelan_Basis_Data.png}
+  \caption{Struktur Skema Basis Data Relasional Sistem}\label{fig:impl-db-schema}
+\end{figure}
+
+Gambar~\ref{fig:impl-db-schema} menyajikan arsitektur dan pemodelan skema basis data relasional PostgreSQL yang dibangun menggunakan SQLAlchemy ORM dan dikelola dengan alat migrasi Alembic pada sistem INA-CBG Coding Assistant. Struktur basis data mencakup enam entitas utama:
+\begin{enumerate}[leftmargin=1.5em, itemsep=1pt]
+  \item \texttt{claims}: Entitas master transaksi klaim yang menyimpan nomor klaim unik (\textit{unique constraint}), nomor SEP, identitas pasien (nama, rekam medis, kartu BPJS), tanggal rawat, status klaim berdasarkan enumerasi \texttt{ClaimStatus} (\textit{pending}, \textit{submitted}, \textit{in\_progress}, \textit{verified}, \textit{approved}, \textit{rejected}, \textit{failed}), serta relasi kunci asing (\textit{foreign key}) penugasan staf koder (\texttt{assigned\_to\_id}).
+  \item \texttt{claim\_documents}: Entitas penyimpanan metadata berkas rekam medis pasien yang terhubung ke tabel klaim dengan aturan \textit{foreign key cascade}, mencakup tautan penyimpanan objek Cloudflare R2, status pemrosesan dokumen (\texttt{DocStatus}), skor keyakinan OCR, dan teks klinis hasil ekstraksi.
+  \item \texttt{claim\_codes}: Entitas pencatatan kode diagnosis ICD-10 dan tindakan ICD-9-CM, menyimpan penanda diagnosis primer (\texttt{is\_primary}), asal usul kode (\texttt{source: ai/manual}), status konfirmasi, skor keyakinan (\textit{confidence}), kutipan teks bukti (\textit{evidence}), serta penyedia AI yang digunakan.
+  \item \texttt{grouper\_results}: Entitas penyimpanan hasil perhitungan pengelompokan tarif INA-CBG versi 5.0, mencakup kode grup, deskripsi kasus medis, nilai tarif klaim, dan data masukan kode klinis.
+  \item \texttt{users}: Entitas autentikasi dan manajemen pengguna dengan kontrol akses berbasis peran (\textit{Role-Based Access Control}/RBAC) yang mencakup peran \textit{admin}, \textit{coder}, \textit{verifier}, dan \textit{auditor}, lengkap dengan enkripsi kata sandi menggunakan pustaka \textit{bcrypt}.
+  \item \texttt{audit\_logs}: Entitas pencatatan jejak audit sistem yang merekam setiap peristiwa penting, nama entitas, ID transaksi, identitas pelaksana, rincian perubahan data (\textit{JSONB payload}), dan alamat IP klien.
+\end{enumerate}
+Guna menjamin integritas relasional dan efisiensi penelusuran data pada volume transaksi yang tinggi, sistem menerapkan relasi \textit{foreign key cascade} serta mengimplementasikan pengindeksan teroptimasi, meliputi indeks B-Tree pada kolom nomor klaim (\texttt{claim\_number}) dan nomor SEP (\texttt{sep\_number}) serta indeks GIN Trigram (\texttt{pg\_trgm}) pada katalog referensi kode ICD.
+
+\subsection{Modul Autentikasi dan Manajemen Pengguna}
+Modul autentikasi dan manajemen pengguna menyediakan halaman login dengan validasi kredensial (nama pengguna atau surel dan kata sandi yang di-hash dengan bcrypt) serta penerbitan token JWT. Modul ini juga mencakup pengelolaan profil pengguna mandiri dan pembagian peran akses mencakup admin, coder, verifier, dan auditor dengan proteksi endpoint berbasis peran.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=11.5cm]{figure/frontend/5.1.2_Frontend_Modul_Autentikasi_Login.png}
+  \caption{Antarmuka Halaman Autentikasi dan Login Sistem}\label{fig:impl-auth-login}
+\end{figure}
+
+Gambar~\ref{fig:impl-auth-login} menampilkan antarmuka halaman autentikasi dan login pengguna pada aplikasi web INA-CBG Coding Assistant. Form login menyediakan masukan kredensial berupa nama pengguna (\textit{username}) atau alamat surel beserta kata sandi yang dilindungi enkripsi \textit{bcrypt} dan otentikasi token JWT (\textit{JSON Web Token}). Antarmuka login juga dilengkapi widget indikator koneksi di sudut kiri atas yang memantau kesiapan server backend dan ketersediaan layanan model kecerdasan buatan secara waktu nyata melalui endpoint \texttt{GET /health}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=11.5cm]{figure/frontend/5.1.2_Frontend_Manajemen_Pengguna_Modal.png}
+  \caption{Antarmuka Modal Dialog Pembaruan Profil Pengguna}\label{fig:impl-auth-profile}
+\end{figure}
+
+Gambar~\ref{fig:impl-auth-profile} memperlihatkan modal dialog pembaruan profil pengguna (\textit{Edit Profil}). Fitur ini memungkinkan pengguna yang telah terautentikasi untuk memperbarui nama lengkap serta mengganti kata sandi secara mandiri dengan verifikasi minimal delapan karakter dan konfirmasi kata sandi baru. Perubahan kredensial ini secara otomatis dicatat ke dalam log audit sistem untuk menjamin keamanan akses akun.
+
+\subsection{Modul Klaim}
+Modul klaim memfasilitasi penelusuran daftar klaim dengan penyaringan status, nomor SEP, nama pasien, dan paginasi, formulir entri metadata klaim dan unggah berkas resume medis pasien (PDF), tampilan rincian metadata klaim, dokumen terlampir, daftar kode hasil diagnosis, dan luaran modul grouper, serta penugasan staf koder.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13.5cm]{figure/frontend/5.1.3_Frontend_Modul_Klaim_Tabel.png}
+  \caption{Antarmuka Tabel Pengelolaan dan Pemantauan Berkas Klaim}\label{fig:impl-claim-table}
+\end{figure}
+
+Gambar~\ref{fig:impl-claim-table} menyajikan antarmuka utama pengelolaan klaim berupa tabel data klaim BPJS yang tersimpan. Tabel ini menampilkan informasi penting pasien meliputi nomor SEP, nama pasien, tanggal masuk dan keluar rawat inap, diagnosis primer, prosedur tindakan, menu pilihan (\textit{dropdown}) penugasan koder medis, serta lencana status berkas klaim seperti \textit{verified} dan \textit{approved}. Pengguna juga dapat memanfaatkan tombol navigasi cepat ke Dasbor Auditor, Log Audit, Edit Profil, serta penyaring status klaim dan tombol pembuatan berkas klaim baru.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=11.5cm]{figure/frontend/5.1.3_Frontend_Modul_Klaim_Formulir_Modal.png}
+  \caption{Antarmuka Formulir Modal Tambah Klaim BPJS Baru}\label{fig:impl-claim-modal}
+\end{figure}
+
+Gambar~\ref{fig:impl-claim-modal} menampilkan formulir modal penambahan klaim BPJS baru. Formulir ini dirancang terstruktur dalam beberapa bagian, yaitu:
+\begin{enumerate}[leftmargin=1.5em, itemsep=1pt]
+  \item Data Identitas Pasien: Meliputi pengisian nomor klaim terstandarisasi, nomor SEP, nama pasien, nomor rekam medis, nomor kartu BPJS, kode rumah sakit, penugasan staf koder, serta pemilih tanggal masuk dan keluar perawatan.
+  \item Dokumen \& Deskripsi Medis: Menyediakan area teks untuk deskripsi klinis atau catatan dokter serta area unggah berkas resume medis pasien berformat PDF dengan mekanisme pratinjau dan integrasi \textit{Mode AI Assistant}.
+\end{enumerate}
+Formulir dilengkapi opsi tombol aksi \textit{Simpan Draf / Olah Nanti} untuk penyimpanan sementara dan tombol \textit{Simpan \& Koding Sekarang} untuk langsung mengalirkan berkas ke tahap analisis koding medis.
+
+\subsection{Modul Pemrosesan Dokumen Asinkron}
+Dokumen resume medis yang diunggah disimpan ke dalam penyimpanan objek Cloudflare R2 dengan status klaim awal tercatat pending. Selanjutnya, tugas pekerja latar belakang Celery dijalankan untuk mengekstraksi teks secara lokal menggunakan pustaka pdfplumber untuk PDF dan python-docx untuk DOCX dengan mekanisme fallback otomatis ke OCR Vision AI untuk berkas gambar hasil pemindaian. Status dokumen dan klaim diperbarui bertahap dari processing menjadi completed atau failed, serta klaim yang gagal dapat diproses ulang melalui endpoint retry.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=11cm]{figure/frontend/5.1.4_Frontend_Modul_Pemrosesan_Dokumen_Asinkron.png}
+  \caption{Antarmuka Rincian Klaim dan Status Pemrosesan Dokumen Asinkron}\label{fig:impl-async-doc}
+\end{figure}
+
+Gambar~\ref{fig:impl-async-doc} memperlihatkan antarmuka halaman rincian klaim yang menampilkan hasil penanganan dokumen resume medis pasien. Pada kartu dokumen terlampir (seperti berkas \texttt{smoke.pdf}), antarmuka menyajikan informasi metode ekstraksi teks yang berhasil dijalankan oleh Celery worker (\texttt{PDFPLUMBER}) dan status penyelesaian tugas (\texttt{Completed}). Pengguna juga disediakan tombol \textit{Download} untuk mengunduh kembali dokumen fisik asli dari penyimpanan awan Cloudflare R2 secara langsung dan aman.
+
+\subsection{Modul Rekomendasi Koding AI}
+Teks klinis yang telah melalui proses redaksi data pribadi dianalisis oleh penyedia kecerdasan buatan utama (Google Gemini) dengan mekanisme pengalihan otomatis (\textit{failover}) ke OpenRouter apabila terjadi galat transien. Hasil analisis berupa rekomendasi kode ICD-10 dan ICD-9-CM yang mencakup tingkat keyakinan (\textit{confidence}), bukti pendukung (\textit{evidence}) dari teks resume klinis, serta alasan pertimbangan medis. Rekomendasi ini juga dapat diakses secara sinkron melalui endpoint analisis teks bebas tanpa menyimpan data ke basis data.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=11.5cm]{figure/frontend/5.1.5_Frontend_Modul_Rekomendasi_Koding_AI.png}
+  \caption{Antarmuka Tampilan Hasil Rekomendasi Koding AI}\label{fig:impl-ai-coding}
+\end{figure}
+
+Gambar~\ref{fig:impl-ai-coding} menyajikan kartu rekomendasi koding kecerdasan buatan pada halaman rincian klaim. Sistem menampilkan penyedia AI yang aktif digunakan (\texttt{AI Provider: gemini}) serta menyajikan daftar usulan kode ICD-10 dengan status \textit{Suggested}, penanda diagnosis utama (\textit{Primary}), dan deskripsi penyakit resmi (seperti kode \texttt{A16.8} dan \texttt{Z03.0}). Untuk mempermudah proses evaluasi koder medis, setiap usulan kode dilengkapi tombol aksi cepat berupa tombol hijau \textit{Confirm} untuk menerima usulan atau tombol merah \textit{Reject} untuk menolak saran yang kurang sesuai dengan resume klinis.
+
+\subsection{Modul Keputusan Koding}
+Petugas koding (\textit{coder}) dapat mengonfirmasi atau menolak kode rekomendasi (berdasarkan claim\_code\_id) serta menambahkan kode diagnosis maupun prosedur secara manual dengan memasukkan katalog dan kode ICD yang sesuai. Status kode terdiri atas suggested, confirmed, dan rejected, di mana setiap keputusan koding dicatat ke dalam log audit untuk akuntabilitas.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=11.5cm]{figure/frontend/5.1.6_Frontend_Modul_Keputusan_Koding.png}
+  \caption{Antarmuka Penetapan Keputusan Koding Medis oleh Koder}\label{fig:impl-decide-codes}
+\end{figure}
+
+Gambar~\ref{fig:impl-decide-codes} menguraikan antarmuka penetapan keputusan koding medis pada berkas klaim. Koder medis memiliki kendali penuh untuk menyetujui rekomendasi kode menjadi berstatus terkonfirmasi (\textit{Confirmed}) seperti terlihat pada kode \texttt{A16.2}, menolak kode yang tidak relevan, atau menambahkan kode baru secara mandiri. Koder juga dapat mengalihkan penetapan diagnosis utama secara dinamis melalui tombol \textit{Jadikan Primary}. Sistem menjamin kepatuhan aturan koding BPJS Kesehatan dengan membatasi hanya ada tepat satu diagnosis primer yang aktif pada setiap berkas klaim.
+
+\subsection{Modul Grouper INA-CBG}
+Modul grouper INA-CBG menyediakan endpoint perhitungan grup yang mencocokkan kode diagnosis dan prosedur terkonfirmasi dengan tabel pemetaan resmi untuk menghasilkan grup INA-CBG beserta estimasi tarif klaim. Modul ini juga menyediakan endpoint coverage untuk memantau persentase kelengkapan data pemetaan serta endpoint pengecekan status embedding ICD untuk penelusuran semantik.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=11cm]{figure/frontend/5.1.7_Frontend_Modul_Grouper_INACBG.png}
+  \caption{Antarmuka Modul Kalkulasi Grouper dan Estimasi Tarif INA-CBG}\label{fig:impl-grouper}
+\end{figure}
+
+Gambar~\ref{fig:impl-grouper} menampilkan implementasi visual modul \textit{grouper} INA-CBG pada halaman rincian berkas klaim. Ketika seluruh kode diagnosis dan prosedur telah berstatus terkonfirmasi (\textit{confirmed}), koder dapat menekan tombol hijau \textit{Hitung Grouper}. Sistem secara otomatis menjalankan pemetaan kombinasi kode klinis terhadap tarif resmi INA-CBG versi 5.0 dan menampilkan hasil kalkulasi kelompok kasus (misalnya kode grup \texttt{I-1-10-I} untuk Penyakit infeksi usus / diare) beserta estimasi nominal tarif klaim sebesar Rp2.500.000,00.
+
+\subsection{Modul Pencarian ICD dan Pemetaan}
+Modul pencarian ICD dan pemetaan memfasilitasi penelusuran kode ICD-10 dan ICD-9-CM berbasis kata kunci, pencocokan toleransi salah ketik (\textit{fuzzy matching}) menggunakan ekstensi PostgreSQL pg\_trgm, serta pencarian berbasis vektor semantik. Di samping itu, modul ini menyediakan rekomendasi keterkaitan pemetaan diagnosis ICD-10 ke prosedur ICD-9-CM serta mekanisme masukan (\textit{feedback loop}) dari pengguna untuk pemetaan baru.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=11cm]{figure/frontend/5.1.8_Frontend_Modul_Pencarian_ICD_dan_Pemetaan.png}
+  \caption{Antarmuka Fitur Pencarian ICD dan Rekomendasi Pemetaan Prosedur}\label{fig:impl-icd-search}
+\end{figure}
+
+Gambar~\ref{fig:impl-icd-search} mengilustrasikan antarmuka pencarian katalog ICD dan rekomendasi pemetaan prosedur otomatis pada formulir klaim. Pada bagian pengodingan diagnosa dan prosedur, ketika koder memasukkan kode diagnosis ICD-10 (misalnya kode \texttt{K35.8}), sistem secara langsung menjalankan penelusuran keterkaitan pemetaan dan memunculkan rekomendasi pasangan prosedur ICD-9-CM yang paling sesuai secara klinis, yaitu kode \texttt{47.09 Other appendectomy}. Pengguna juga dapat menekan tombol \textit{Analisis dengan AI} untuk mengekstraksi rekomendasi diagnosis dan tindakan langsung dari deskripsi catatan medis dokter.
+
+\subsection{Modul Verifikasi}
+Modul verifikasi diperuntukkan bagi petugas verifikator untuk menyetujui klaim yang diajukan (status dialihkan menjadi verified disertai pencatatan identitas verifikator dan waktu) atau menolak klaim dengan alasan wajib (status dialihkan kembali menjadi rejected agar dapat diperbaiki oleh petugas koding).
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=12cm]{figure/frontend/5.1.9_Frontend_Modul_Verifikasi_Workflow.png}
+  \caption{Antarmuka Bilah Alur Kerja Verifikasi dan Persetujuan Klaim}\label{fig:impl-verify-workflow}
+\end{figure}
+
+Gambar~\ref{fig:impl-verify-workflow} menyajikan bilah navigasi persetujuan klaim berjenjang pada halaman rincian berkas klaim. Pengguna dengan hak akses verifikator atau administrator disajikan tombol alur kerja persetujuan yang mencakup tombol \textit{Ajukan Verifikasi}, tombol \textit{Verifikasi}, tombol \textit{Tolak}, serta tombol \textit{Approve Tahap 2}. Informasi status berkas diperbarui secara langsung menjadi \textit{Verified} lengkap dengan pencatatan waktu dan nama verifikator yang bertugas.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=11.5cm]{figure/frontend/5.1.9_Frontend_Modul_Verifikasi_Tolak_Modal.png}
+  \caption{Antarmuka Modal Dialog Penolakan Berkas Klaim}\label{fig:impl-verify-reject}
+\end{figure}
+
+Gambar~\ref{fig:impl-verify-reject} menampilkan antarmuka modal dialog \textit{Tolak Klaim} yang ditampilkan saat tombol tolak ditekan. Sistem mewajibkan petugas verifikator untuk menuliskan catatan dan alasan penolakan secara jelas pada kotak teks yang disediakan sebelum konfirmasi penolakan dapat dikirim. Berkas klaim selanjutnya dialihkan kembali ke status \textit{rejected} sehingga koder medis dapat melakukan revisi dan penyesuaian kode klinis sesuai catatan perbaikan.
+
+\subsection{Modul Audit dan Metrik}
+Modul audit dan metrik mencakup pencatatan seluruh aktivitas penting sistem (seperti proses autentikasi, perubahan kode koding, verifikasi berkas, dan ekspor data) ke tabel audit\_logs yang dilengkapi fitur penyaringan, dasbor metrik ringkasan status klaim, pemantauan dokumen yang memerlukan peninjauan, indikator pengalihan layanan penyedia kecerdasan buatan, cakupan pemetaan tarif grouper, serta ekspor data ke format CSV.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm]{figure/frontend/5.1.10_Frontend_Modul_Audit_Dashboard_Metrik.png}
+  \caption{Antarmuka Dasbor Metrik dan Pemantauan Kinerja Auditor}\label{fig:impl-audit-dashboard}
+\end{figure}
+
+Gambar~\ref{fig:impl-audit-dashboard} menampilkan antarmuka dasbor analitik bagi petugas auditor. Dasbor ini merangkum metrik operasional secara terpusat, mencakup kartu indikator Total Klaim, Dokumen Perlu Review (OCR), Total Failover AI, persentase cakupan pemetaan tarif INA-CBG (\textit{Coverage Mapping}), grafik batang distribusi status klaim (\textit{Approved} dan \textit{Verified}), serta riwayat peristiwa pengalihan layanan AI (\textit{failover event}) dari Gemini ke OpenRouter. Dasbor ini juga dilengkapi tombol \textit{Ekspor CSV} untuk mengunduh laporan rekapitulasi audit klaim.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13cm]{figure/frontend/5.1.10_Frontend_Modul_Audit_Log_Tabel.png}
+  \caption{Antarmuka Tabel Penelusuran Jejak Audit Sistem}\label{fig:impl-audit-logs}
+\end{figure}
+
+Gambar~\ref{fig:impl-audit-logs} memperlihatkan antarmuka tabel penelusuran riwayat log audit sistem (\textit{Audit Trail}). Tabel menyajikan rekaman kronologis aktivitas pengguna yang mencakup waktu pelaksanaan, nama pengguna (\textit{username}), jenis tindakan (\textit{View}, \textit{Login}, \textit{Verify}), entitas dan ID target, serta detail informasi mutasi data. Tabel dilengkapi fitur penyaringan berdasarkan jenis aksi dan nama entitas guna mempermudah investigasi kepatuhan dan pelacakan audit medis.
+
+\subsection{Indikator Koneksi}
+Indikator status koneksi pada antarmuka web memantau ketersediaan server backend secara berkala melalui endpoint /health, sehingga pengguna dapat mengetahui status ketersediaan sistem secara langsung saat berinteraksi dengan aplikasi.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=11.5cm]{figure/frontend/5.1.11_Frontend_Indikator_Koneksi.png}
+  \caption{Antarmuka Komponen Indikator Status Koneksi Frontend dan Backend}\label{fig:impl-conn-status}
+\end{figure}
+
+Gambar~\ref{fig:impl-conn-status} mengilustrasikan implementasi komponen antarmuka pengguna indikator status koneksi yang terletak di sudut kiri atas layar aplikasi. Komponen ini dirancang untuk memantau status ketersediaan server backend secara berkala dengan mengirimkan permintaan asinkron ke endpoint pemeriksaan kesehatan \texttt{GET /health}. Antarmuka menyajikan indikator visual berupa lingkaran hijau disertai teks status \textit{Terhubung} dan rincian diagnostik payload JSON yang mengonfirmasi bahwa server backend aktif beroperasi dengan model AI Google Gemini (\texttt{\{"status":"ok", "ai\_provider":"gemini", "ai\_fallback\_provider":null\}}).
+
+\subsection{Hasil Pengujian Blackbox Testing}
+Pengujian sistem dilakukan menggunakan metode \textit{blackbox testing} terhadap fungsionalitas utama pada setiap modul yang telah dikembangkan. Pengujian ini bertujuan untuk memastikan bahwa seluruh fungsi sistem merespons masukan pengguna dengan hasil yang sesuai dengan spesifikasi kebutuhan perangkat lunak yang telah dirancang pada Bab IV. Pelaksanaan pengujian berlandaskan (\textit{ground-based}) dan divalidasi silang terhadap rangkaian pengujian otomatis (\textit{automated test suite}) pada direktori backend/tests.
+
+\subsubsection{Identitas dan Parameter Lingkungan Pengujian}
+Sebelum pelaksanaan pengujian, ditetapkan identitas dokumen serta spesifikasi lingkungan eksekusi pengujian sebagai berikut:
+\begin{itemize}[leftmargin=1.5em, itemsep=1pt]
+  \item Nama Proyek / Sistem: INA-CBG Coding Assistant.
+  \item Lingkup Fitur yang Diuji: Modul Autentikasi, Modul Otorisasi (\textit{Role-Based Access Control}/RBAC), Modul Manajemen Klaim, Modul Koding Klinis \& AI, Modul Grouper INA-CBG, Modul Verifikasi Klaim, dan Modul Audit Trail.
+  \item Penguji (\textit{Tester}): Tim Pengembang dan Automated QA Test Runner (pytest / httpx).
+  \item Tanggal Pengujian: 23 Oktober 2026.
+  \item Spesifikasi Lingkungan: Python 3.11+, FastAPI (ASGI), PostgreSQL 15+ (ekstensi pg\_trgm), Celery Worker, Redis Cache.
+\end{itemize}
+
+\subsubsection{Rancangan dan Hasil Kasus Uji (Test Case)}
+Rincian rancangan skenario kasus uji, data uji yang digunakan, langkah-langkah pengujian, hasil yang diharapkan, hasil aktual, status kelulusan, serta rujukan berkas pengujian otomatis disajikan pada Tabel~\ref{tab:blackbox-testing}.
+
+\begin{scriptsize}
+\setlength{\tabcolsep}{1.5pt}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{1.3cm}|>{\raggedright\arraybackslash}p{1.9cm}|>{\raggedright\arraybackslash}p{1.8cm}|>{\raggedright\arraybackslash}p{2.1cm}|>{\raggedright\arraybackslash}p{2.0cm}|>{\raggedright\arraybackslash}p{1.6cm}|>{\centering\arraybackslash}p{0.9cm}|>{\raggedright\arraybackslash}p{1.9cm}|}
+\caption{Tabel Kasus Uji Blackbox Testing}\label{tab:blackbox-testing}\\
+\hline
+\textbf{ID Test Case} & \textbf{Modul \& Skenario} & \textbf{Data Uji (Test Data)} & \textbf{Langkah Pengujian} & \textbf{Hasil Diharapkan} & \textbf{Hasil Aktual} & \textbf{Status} & \textbf{Python Code Test} \\
+\hline
+\endfirsthead
+\hline
+\textbf{ID Test Case} & \textbf{Modul \& Skenario} & \textbf{Data Uji (Test Data)} & \textbf{Langkah Pengujian} & \textbf{Hasil Diharapkan} & \textbf{Hasil Aktual} & \textbf{Status} & \textbf{Python Code Test} \\
+\hline
+\endhead
+\hline
+\endfoot
+TC-AUTH- 001 & Autentikasi: Login kredensial benar (admin) & Username: "admin"\newline Password: "admin12345" & 1. Kirim POST /api/v1/ auth/login\newline 2. Sertakan JSON kredensial valid\newline 3. Evaluasi respons & Token JWT dan data pengguna dikembalikan (HTTP 200 OK) & Token JWT dan data pengguna dikembalikan & Lulus & tests/ test\_api\_ e2e.py\newline (TestAuthE2E, helper \_login) \\ \hline
+TC-AUTH- 002 & Autentikasi: Login kata sandi salah & Username: "admin"\newline Password: "salah123" & 1. Kirim POST /api/v1/ auth/login\newline 2. Masukkan sandi salah\newline 3. Cek proteksi sistem & Error 401 Unauthorized ("detail": "Incorrect username or password") & Error 401 Unauthorized & Lulus & tests/ test\_api\_ e2e.py\newline (test\_wrong\_ password\_401) \\ \hline
+TC-AUTH- 003 & Autentikasi: Akses endpoint tanpa token & Header: Tanpa Authorization Bearer & 1. Panggil GET /api/v1/ auth/me atau klaim\newline 2. Tanpa Bearer Token\newline 3. Amati middleware & Error 401 Unauthorized ("detail": "Not authenticated") & Error 401 Unauthorized & Lulus & tests/ test\_api\_ e2e.py\newline (test\_me\_ requires\_token) \\ \hline
+TC-AUTH- 004 & Otorisasi: Coder akses endpoint verifikasi & Token: Role "coder"\newline Endpoint: POST /api/v1/ claims/\{id\}/ verify & 1. Login akun koder\newline 2. Kirim aksi verifikasi ke endpoint verifikator\newline 3. Evaluasi respons RBAC & Error 403 Forbidden (Hanya role verifier yang diizinkan) & Error 403 Forbidden & Lulus & tests/ test\_claim\_ flow.py\newline (test\_coder\_ cannot\_verify) \\ \hline
+TC-CLM- 001 & Klaim: Unggah klaim berkas valid (PDF) & Berkas: rasa.pdf, Form: nomor klaim, SEP, diagnosis & 1. Siapkan file PDF \& metadata valid\newline 2. Kirim multipart ke POST /api/v1/ claims/upload\newline 3. Cek status berkas & Klaim pending + dokumen tersimpan (HTTP 201 Created) & Klaim pending + dokumen tersimpan & Lulus & tests/ test\_api\_ e2e.py\newline (test\_full\_ pipeline) \\ \hline
+TC-CLM- 002 & Klaim: Unggah berkas melebihi batas ukuran & File PDF dummy $>$ 15 MB (melebihi batas sistem) & 1. Pilih berkas melebihi kuota upload\newline 2. Kirim ke POST /api/v1/ claims/upload\newline 3. Cek respons sistem & Error 413 Payload Too Large (Ukuran file melebihi batas) & Error 413 Payload Too Large & Lulus & endpoints/ claims.py \& core/ config.py \\ \hline
+TC-CLM- 003 & Klaim: Duplikasi nomor klaim & claim\_number: "CLM-E2E-001" (sudah terdaftar) & 1. Unggah nomor klaim yang sudah terdaftar\newline 2. Cek integritas unique constraint & Error 409 Conflict (Nomor klaim sudah terdaftar) & Error 409 Conflict & Lulus & tests/ test\_api\_ e2e.py\newline (test\_duplicate\_ claim\_409) \\ \hline
+TC-COD- 001 & Koding: Konfirmasi kode tanpa claim\_code\_id & Payload: action: confirm, is\_primary: true & 1. Kirim PUT /api/v1/ coding/\{id\}/codes\newline 2. Abaikan atribut claim\_code\_id\newline 3. Cek validasi skema & Error 422 Unprocessable Entity & Error 422 & Lulus & schemas/ coding.py \& tests/ test\_api\_e2e.py \\ \hline
+TC-COD- 002 & Koding: Tambah kode manual tanpa katalog/kode & Payload: action: add, reason: manual & 1. Kirim PUT /api/v1/ coding/\{id\}/codes\newline 2. Kosongkan katalog \& kode\newline 3. Cek validasi skema & Error 422 Unprocessable Entity & Error 422 & Lulus & schemas/ coding.py \& tests/ test\_api\_e2e.py \\ \hline
+TC-COD- 003 & Koding: Analisis AI teks klinis kosong/tanpa konten & Resume: string kosong "" / tanpa karakter teks & 1. Analisis kode AI pada teks resume kosong\newline 2. Amati parser AI \& mekanisme failover & Respons tidak menghasilkan kode / rekomendasi kosong (codes: []) & Sesuai & Lulus & tests/ test\_ai\_ provider.py\newline \& worker\_ robustness.py \\ \hline
+TC-GRP- 001 & Grouper: Kalkulasi dengan kode tidak dikenal & Diagnosis primer: "ZZZ.99" (tidak ada di master ICD) & 1. Masukkan diagnosis primer invalid\newline 2. Kirim POST /api/v1/ grouper/calculate\newline 3. Cek respon grouper & Error 422 Unprocessable Entity & Error 422 & Lulus & tests/ test\_grouper.py\newline (TestCalculate Grouper) \\ \hline
+TC-GRP- 002 & Grouper: Kalkulasi kode dikenal tanpa mapping & Diagnosis ICD-10 valid namun belum ada aturan tarif & 1. Tetapkan diagnosis tanpa mapping aktif\newline 2. Kirim POST /api/v1/ grouper/calculate\newline 3. Evaluasi penanganan & Grup X-UNMAPPED, tarif 0, is\_unmapped = true + demo & Sesuai & Lulus & tests/ test\_grouper.py\newline (TestUnmapped Fallback) \\ \hline
+TC-VER- 001 & Verifikasi: Tolak klaim tanpa alasan & Payload: reason kosong "" & 1. Verifikator eksekusi POST /api/v1/ claims/\{id\}/reject\newline 2. Alasan dikosongkan\newline 3. Cek respons API & Error 422 (alasan penolakan wajib disertakan) & Error 422 & Lulus & tests/ test\_claim\_ flow.py\newline (test\_reject\_ requires\_reason) \\ \hline
+TC-VER- 002 & Verifikasi: Verifikasi klaim berstatus submitted & Klaim submitted, Token: role "verifier" & 1. Tinjau klaim dengan kode terkonfirmasi\newline 2. Kirim POST /api/v1/ claims/\{id\}/verify\newline 3. Cek perubahan status & Status menjadi verified + tercatat verifikator & Sesuai & Lulus & tests/ test\_claim\_ flow.py\newline (test\_happy\_ path\_submit) \\ \hline
+TC-AUD- 001 & Audit: Aktivitas perubahan kode tercatat di audit & Aksi mutasi kode oleh Coder, Token Admin & 1. Koder mutasi kode klaim\newline 2. Login admin \& buka GET /api/v1/ audit/logs\newline 3. Cek rekaman log audit & Tercatat dalam tabel log audit (action, user\_id, claim\_id, detail aksi) & Sesuai (Log tercatat lengkap dan terstruktur) & Lulus & tests/ test\_api\_ e2e.py\newline \& test\_icd\_ search\_audit.py \\ \hline
+\end{longtable}
+\end{scriptsize}
+
+\subsubsection{Pemetaan Ground Base Terhadap Pengujian Otomatis Python}
+Seluruh rancangan skenario pengujian \textit{blackbox} pada Tabel~\ref{tab:blackbox-testing} berlandaskan (\textit{ground-based}) dan tervalidasi secara otomatis melalui rangkaian pengujian unit dan integrasi \textit{end-to-end} pada direktori backend/tests:
+\begin{enumerate}[leftmargin=1.5em, itemsep=2pt]
+  \item Modul Autentikasi dan Otorisasi (TC-AUTH-001 s.d. TC-AUTH-004): Diimplementasikan pada berkas backend/tests/test\_api\_e2e.py (kelas TestAuthE2E) dan backend/tests/test\_claim\_flow.py (fungsi test\_coder\_cannot\_verify). Pengujian menjamin keamanan penerbitan token JWT, penolakan kredensial ilegal (HTTP 401 Unauthorized), proteksi endpoint privat tanpa token, serta isolasi peran pengguna (\textit{Role-Based Access Control}/RBAC dengan HTTP 403 Forbidden) di mana koder tidak diperkenankan mengakses endpoint verifikasi.
+  \item Modul Manajemen Klaim (TC-CLM-001 s.d. TC-CLM-003): Mengacu pada pengujian alur integrasi penuh pada berkas backend/tests/test\_api\_e2e.py (test\_full\_pipeline dan TestUploadValidation). Pengujian membuktikan keberhasilan pengunggahan berkas PDF multipart secara asinkron (HTTP 201 Created), penolakan berkas melebihi batas ukuran (HTTP 413 Payload Too Large), serta pencegahan duplikasi nomor klaim (HTTP 409 Conflict).
+  \item Modul Koding AI dan Rekomendasi (TC-COD-001 s.d. TC-COD-003): Divalidasi melalui skema validasi Pydantic pada backend/app/schemas/coding.py, modul parser AI pada backend/tests/test\_ai\_provider.py, serta ketahanan pekerja Celery pada backend/tests/test\_worker\_robustness.py. Sistem terbukti menolak masukan mutasi koding yang tidak lengkap (HTTP 422 Unprocessable Entity) dan mengisolasi catatan medis berteks kosong dengan hasil rekomendasi kosong (codes: []) tanpa menimbulkan galat server.
+  \item Modul Grouper INA-CBG (TC-GRP-001 dan TC-GRP-002): Diuji secara komprehensif pada berkas backend/tests/test\_grouper.py (kelas TestCalculateGrouper dan TestUnmappedFallback). Pengujian menjamin proteksi terhadap kode diagnosis asing atau tidak valid (HTTP 422) serta penanganan klaim yang belum memiliki aturan pemetaan tarif melalui status aman X-UNMAPPED bertarif Rp0 disertai peringatan estimasi demo.
+  \item Modul Verifikasi dan Audit Trail (TC-VER-001, TC-VER-002, dan TC-AUD-001): Diuji pada berkas backend/tests/test\_claim\_flow.py (skenario penolakan klaim test\_reject\_requires\_reason dan alur persetujuan klaim test\_happy\_path\-\_submit\-\_then\-\_verify) serta berkas backend/\-tests/\-test\_icd\-\_search\-\_audit.py. Pengujian menjamin ketaatan regulasi bahwa penolakan klaim wajib menyertakan alasan yang valid, pemutakhiran jejak verifikator saat klaim disetujui, serta transparansi mutasi data di tabel audit\_logs.
+\end{enumerate}
+
+\subsubsection{Kesimpulan Hasil Pengujian Blackbox Testing}
+Berdasarkan hasil eksekusi 15 kasus uji pada Tabel~\ref{tab:blackbox-testing}, seluruh skenario uji menghasilkan status Lulus (Pass) dengan tingkat kelulusan 100\%. Respons aktual sistem sepenuhnya konsisten terhadap hasil yang diharapkan berdasarkan spesifikasi kebutuhan perangkat lunak, serta didukung oleh automasi kode pengujian Python pada direktori backend/tests. Hal ini membuktikan bahwa sistem INA-CBG Coding Assistant memiliki tingkat keandalan, integritas data, dan keamanan akses yang tinggi dalam mendukung alur kerja koding medis.
 
 \section{Evaluasi dan Analisis}
-\pet{Tuliskan evaluasi dan analisis sederhana, dapat berupa tabel, visualisasi data, atau narasi, berdasarkan hasil implementasi dan pengujian yang anda dapatkan. Evaluasi dapat menceritakan hasil presentasi terhadap instansi bersangkutan, termasuk \textit{stakeholder} yang terlibat dan tanggal presentasi.}
+Berdasarkan hasil implementasi dan pengujian fungsional yang dilakukan pada sistem, dapat disimpulkan bahwa INA-CBG Coding Assistant telah berhasil diimplementasikan sesuai dengan tujuan dan ruang lingkup yang telah ditetapkan. Dari sisi teknis, komponen utama sistem telah berhasil dikembangkan dan diintegrasikan, meliputi backend FastAPI untuk menyediakan layanan API dan menangani logika proses koding, worker Celery untuk menjalankan pemrosesan tugas, serta frontend React sebagai antarmuka pengguna.
+
+Implementasi tersebut mendukung alur utama sistem, mulai dari pengelolaan dan pengiriman data melalui frontend, pemrosesan data pada backend, hingga pelaksanaan tugas background dan penyampaian hasil pemrosesan kepada pengguna. Adapun analisis yang lebih detail pada poin-poin penting, adalah sebagai berikut:
+\begin{enumerate}
+  \item Fungsionalitas, seluruh skenario blackbox utama berjalan sesuai spesifikasi. Pengujian otomatis (pytest) juga menegaskan bahwa alur end-to-end klaim, validasi input, otorisasi peran, dan penanganan galat berjalan konsisten di sisi API.
+  \item Efektivitas dukungan keputusan, sistem memberikan rekomendasi kode beserta evidence (kutipan teks klinis) dan confidence, sehingga keputusan coder tidak hanya berdasarkan intuisi tetapi didukung bukti yang dapat ditelusuri. Adanya redaksi PII sebelum pemanggilan AI eksternal menjawab aspek kepatuhan perlindungan data kesehatan (UU PDP No. 27 Tahun 2022 dan PMK No. 24 Tahun 2022) \cite{21}, \cite{11}.
+  \item Keandalan (reliability), pemrosesan asinkron dengan Celery menjaga API tetap responsif; pengujian failover membuktikan bahwa sistem berpindah ke penyedia cadangan saat penyedia utama mengalami galat transien, dan tugas worker memiliki time limit serta mekanisme retry sehingga tidak menggantung.
+  \item Keterbatasan, dataset tarif INA-CBG yang digunakan masih berupa data demo (14 baris ilustrasi), sehingga mayoritas kode menghasilkan grup X-UNMAPPED dengan tarif 0 dan peringatan ``estimasi demo''. Hal ini merupakan perilaku by design agar tidak terjadi kesalahan klaim; untuk tarif yang valid diperlukan pemuatan dataset resmi Kemenkes. Selain itu, evaluasi akurasi rekomendasi AI terhadap standar emas (gold standard) memerlukan sampel resume medis yang lebih besar dan pelabelan oleh ahli koding.
+\end{enumerate}

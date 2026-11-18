@@ -1,14 +1,20 @@
 %==============================================================================
 % BAB VI: KESIMPULAN DAN SARAN
-% [Constraints]:
-% - Kesimpulan WAJIB menjawab seluruh butir Rumusan Masalah & sesuai Tujuan di Bab I.
 %==============================================================================
 \chapter{Kesimpulan dan Saran}
 
-\pet{Tuliskan apa yang perlu disampaikan sebagai penutup berupa kesimpulan dan saran PKL.}
-
 \section{Kesimpulan}
-\pet{Tuliskan kesimpulan baik mengenai proses pelaksanaan PKL maupun mengenai substansi yang dikerjakan selama PKL. Kesimpulan harus menjawab semua poin Rumusan Masalah \& sesuai dengan Tujuan yang terdapat dalam Bab I.}
+Berdasarkan hasil praktek lapangan kerja, perancangan, implementasi, dan pengujian yang telah dilakukan, dapat disimpulkan bahwa sistem pendukung keputusan INA-CBG Coding Assistant berhasil dibangun sebagai aplikasi \textit{web} yang membantu petugas koding menangani proses klaim BPJS, mulai dari pengunggahan resume medis, ekstraksi teks dokumen melalui \textit{parsing} lokal dengan \textit{fallback} OCR AI, rekomendasi kode ICD-10 dan ICD-9-CM berbasis analisis AI beserta bukti pendukung dan tingkat keyakinannya, pengambilan keputusan kode oleh \textit{coder}, hingga perhitungan estimasi grup dan tarif INA-CBG. Keandalan layanan ditopang oleh arsitektur yang memisahkan API \textit{server} (FastAPI) dan pemrosesan berat (Celery \textit{worker}) melalui antrean Redis sehingga API tetap responsif, serta mekanisme \textit{auto-failover} antar penyedia AI (Google Gemini sebagai penyedia utama dan OpenRouter sebagai cadangan) yang menjaga kontinuitas layanan rekomendasi ketika terjadi galat transien. Dari sisi kepatuhan dan tata kelola, redaksi PII sebelum data dikirim ke penyedia AI eksternal serta pencatatan \textit{log audit} untuk setiap keputusan koding dan verifikasi menjadikan sistem selaras dengan prinsip perlindungan data kesehatan dan kebutuhan ketertelusuran klaim. Pengujian \textit{blackbox} terhadap fungsionalitas utama menunjukkan seluruh skenario uji berjalan sesuai harapan dan pengujian otomatis API (lebih dari seratus kasus uji) seluruhnya lulus, sehingga sistem siap digunakan pada lingkungan uji coba (\textit{demo/UAT}).
+
+Meskipun demikian, sistem juga telah mengidentifikasi batasannya sendiri, yaitu ketika data \textit{mapping} INA-CBG resmi belum tersedia, hasil perhitungan ditampilkan sebagai X-UNMAPPED disertai peringatan eksplisit ``estimasi \textit{demo}'' sehingga tidak berpotensi menimbulkan kesalahan klaim.
 
 \section{Saran}
-\pet{Tuliskan saran terhadap penelitian (berdasarkan observasi \& analisis hasil) untuk kedepannya. Saran juga dapat berkaitan mengenai proses pelaksanaan PKL selama bekerja di instansi, agar dapat menjadi lebih baik kedepannya.}
+Berdasarkan hasil praktek lapangan kerja, terdapat beberapa saran untuk pengembangan selanjutnya:
+\begin{enumerate}
+  \item Memuat \textit{dataset} tarif dan pemetaan INA-CBG resmi Kementerian Kesehatan ke dalam basis data, lalu memverifikasi kelengkapan \textit{coverage}-nya melalui \textit{endpoint coverage grouper} agar hasil perhitungan tarif valid untuk klaim sungguhan.
+  \item Mengevaluasi akurasi rekomendasi kode AI secara berkala menggunakan sampel emas (\textit{gold standard}) yang dilabeli ahli koding, serta menyempurnakan \textit{prompt} dan model berdasarkan hasil evaluasi.
+  \item Menambahkan lapisan \textit{human-in-the-loop} yang lebih lengkap (alur verifikasi dua tingkat) dan integrasi dengan sistem informasi rumah sakit (SIMRS) serta aplikasi SEP/klaim BPJS agar data klaim tidak perlu di-\textit{input} ulang.
+  \item Meningkatkan keamanan produksi, antara lain penggunaan DPA (\textit{Data Processing Agreement}) dengan penyedia AI, penguncian CORS, penggantian \textit{secret key default}, kebijakan retensi berkas dokumen, serta penerapan pemantauan galat (misalnya Sentry) dan \textit{backup} basis data terjadwal.
+  \item Mengembangkan evaluasi dokumen hasil pindaian (OCR) secara lebih luas, termasuk pengukuran akurasi dengan metrik CER/WER pada beragam kualitas pindaian, agar ketahanan sistem terhadap tulisan tangan dapat diukur secara kuantitatif.
+  \item Melakukan uji coba langsung bersama petugas koding di rumah sakit dan mengumpulkan umpan balik untuk penyempurnaan antarmuka dan alur kerja sebelum penerapan penuh.
+\end{enumerate}

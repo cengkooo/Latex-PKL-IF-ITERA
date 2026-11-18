@@ -7,31 +7,33 @@
 \section{Latar Belakang}
 Salah satu indikator utama dalam menilai tingkat kesejahteraan suatu bangsa adalah kesehatan masyarakat. Pemerintah Indonesia telah mengupayakan berbagai langkah untuk mendukung terwujudnya kesehatan masyarakat yang optimal, salah satunya melalui penyelenggaraan layanan rumah sakit. Di samping itu, pemerintah juga menghadirkan Program Jaminan Kesehatan Nasional (JKN) sebagai bentuk jaminan atas akses layanan kesehatan yang efektif dan efisien bagi seluruh lapisan masyarakat \cite{10}.
 
-Program JKN diselenggarakan melalui skema asuransi sosial, dengan tujuan meringankan beban finansial masyarakat yang timbul akibat kebutuhan layanan kesehatan \cite{10}. Penggantian biaya atas layanan kesehatan yang telah diterima masyarakat dilakukan melalui mekanisme pengajuan klaim BPJS oleh pihak rumah sakit \cite{1}. Proses pengajuan klaim tersebut mengharuskan terpenuhinya sejumlah persyaratan, baik dari sisi kelengkapan administrasi maupun ketepatan kode diagnosis dan tindakan medis yang diberikan \cite{1}. Persyaratan ini menjadi acuan untuk memastikan keabsahan proses pembiayaan sekaligus mencegah terjadinya penolakan klaim oleh pihak BPJS Kesehatan. Apabila persyaratan administrasi belum terpenuhi atau terdapat ketidaksesuaian kode diagnosis dan tindakan, maka klaim akan berstatus pending \cite{10}, \cite{14}.
+Program JKN diselenggarakan melalui skema asuransi sosial, dengan tujuan meringankan beban finansial masyarakat yang timbul akibat kebutuhan layanan kesehatan \cite{10}. Penggantian biaya atas layanan kesehatan yang telah diterima masyarakat dilakukan melalui mekanisme pengajuan klaim BPJS oleh pihak rumah sakit \cite{1}. Proses pengajuan klaim tersebut mengharuskan terpenuhinya sejumlah persyaratan, baik dari sisi kelengkapan administrasi maupun ketepatan kode diagnosis dan tindakan medis yang diberikan \cite{1}. Persyaratan ini menjadi acuan untuk memastikan keabsahan proses pembiayaan sekaligus mencegah terjadinya penolakan klaim oleh pihak BPJS Kesehatan. Apabila persyaratan administrasi belum terpenuhi atau terdapat ketidaksesuaian kode diagnosis dan tindakan, maka klaim akan berstatus \textit{pending} \cite{10}, \cite{14}.
 
-Ketika klaim BPJS berstatus pending, berkas yang bermasalah akan dikembalikan kepada rumah sakit untuk dilakukan peninjauan ulang \cite{14}. Kondisi pending claim ini umumnya disebabkan oleh sejumlah faktor, di antaranya keterbatasan sumber daya manusia \cite{10}, \cite{14}, kesalahan dalam proses koding \cite{10}, \cite{16}, serta ketidaklengkapan dokumen pendukung klaim \cite{10}, \cite{16}. Permasalahan tersebut berdampak langsung pada terganggunya arus kas rumah sakit, yang pada gilirannya dapat menghambat pembayaran gaji pegawai, kewajiban kepada pemasok, dan alokasi biaya pemeliharaan fasilitas rumah sakit \cite{10}, \cite{14}.
+Ketika klaim BPJS berstatus \textit{pending}, berkas yang bermasalah akan dikembalikan kepada rumah sakit untuk dilakukan peninjauan ulang \cite{14}. Kondisi \textit{pending claim} ini umumnya disebabkan oleh sejumlah faktor, di antaranya keterbatasan sumber daya manusia \cite{10}, \cite{14}, kesalahan dalam proses koding \cite{10}, \cite{16}, serta ketidaklengkapan dokumen pendukung klaim \cite{10}, \cite{16}. Permasalahan tersebut berdampak langsung pada terganggunya arus kas rumah sakit, yang pada gilirannya dapat menghambat pembayaran gaji pegawai, kewajiban kepada pemasok, dan alokasi biaya pemeliharaan fasilitas rumah sakit \cite{10}, \cite{14}.
 
-Kondisi ini menunjukkan perlunya analisis lebih mendalam serta langkah penanganan yang tepat guna mengidentifikasi akar permasalahan dan menekan potensi terjadinya pending klaim BPJS Kesehatan.
+Menjawab permasalahan tersebut, diperlukan solusi nyata berupa pengembangan arsitektur \textit{backend} menggunakan kerangka kerja FastAPI yang terhubung langsung dengan model kecerdasan buatan (\textit{artificial intelligence}). Melalui pemanfaatan AI yang memiliki kemampuan \textit{optical character recognition} (OCR) dan penalaran klinis, sistem dapat mengekstraksi informasi rekam medis secara otomatis, memberikan rekomendasi kode diagnosis serta prosedur yang presisi, dan secara efektif menekan potensi terjadinya \textit{pending claim} BPJS Kesehatan.
 
 \section{Rumusan Masalah}
-Dari latar belakang yang telah dijelaskan sebelumnya, maka rumusan masalah pada Praktek Kerja Lapangan ini adalah sebagai berikut:
+Berdasarkan fenomena dan urgensi permasalahan yang telah diuraikan pada latar belakang, diperlukan rumusan masalah yang spesifik untuk memandu perancangan sistem dan analisis data. Rumusan masalah pada topik ini dirumuskan sebagai berikut:
 \begin{enumerate}
-    \item Bagaimana proses alur administrasi serta faktor-faktor penyebab terjadinya pending claim pada pengajuan klaim BPJS Kesehatan dapat dianalisis?
-    \item Bagaimana rekomendasi sistem yang mampu meminimalisir risiko terjadinya pending claim pada pengajuan klaim BPJS Kesehatan dapat dirancang?
+    \item Bagaimana proses alur administrasi serta faktor-faktor penyebab terjadinya \textit{pending claim} pada pengajuan klaim BPJS Kesehatan dapat dianalisis?
+    \item Bagaimana rekomendasi sistem yang mampu meminimalisir risiko terjadinya \textit{pending claim} pada pengajuan klaim BPJS Kesehatan dapat dirancang?
 \end{enumerate}
 
 \section{Tujuan}
-Adapun tujuan dari Praktek Kerja Lapangan ini adalah sebagai berikut:
+Untuk menjawab rumusan masalah tersebut secara terarah dan terukur, ditetapkan sejumlah tujuan penelitian. Adapun tujuan dari pelaksanaan topik ini adalah sebagai berikut:
 \begin{enumerate}
-    \item Menganalisis alur administrasi, faktor-faktor penyebab, dan potensi terjadinya pending claim pada pengajuan klaim BPJS Kesehatan.
-    \item Merancang rekomendasi sistem untuk meminimalisir risiko terjadinya pending claim pada pengajuan klaim BPJS Kesehatan.
+    \item Menganalisis alur administrasi, faktor-faktor penyebab, dan potensi terjadinya \textit{pending claim} pada pengajuan klaim BPJS Kesehatan.
+    \item Merancang rekomendasi sistem untuk meminimalisir risiko terjadinya \textit{pending claim} pada pengajuan klaim BPJS Kesehatan.
 \end{enumerate}
 
 \section{Manfaat}
+Tercapainya tujuan penelitian tersebut diharapkan dapat memberikan kontribusi nyata serta nilai tambah, baik secara akademis maupun praktis. Manfaat yang diperoleh dari pelaksanaan topik ini diuraikan sebagai berikut:
+
 \subsection{Bagi Mahasiswa}
 \begin{enumerate}
     \item Memperoleh wadah untuk mengimplementasikan ilmu yang telah diperoleh selama menempuh perkuliahan.
-    \item Memperoleh gambaran mengenai kondisi lingkungan kerja pada instansi/perusahaan tempat pelaksanaan PKL.
+    \item Memperoleh gambaran mengenai kondisi lingkungan kerja pada instansi atau perusahaan tempat pelaksanaan topik ini.
     \item Menumbuhkan sikap tanggung jawab serta kedisiplinan pada diri mahasiswa.
     \item Membentuk dan mengasah sikap maupun pola pikir profesional sebagai bekal sebelum memasuki dunia kerja yang sesungguhnya.
 \end{enumerate}
@@ -45,11 +47,11 @@ Adapun tujuan dari Praktek Kerja Lapangan ini adalah sebagai berikut:
 \subsection{Bagi Instansi}
 \begin{enumerate}
     \item Berkontribusi dalam mendukung terciptanya sumber daya manusia yang kompeten di dunia kerja.
-    \item Menjalin pertukaran informasi di bidang teknologi antara pihak instansi dengan mahasiswa pelaksana PKL.
+    \item Menjalin pertukaran informasi di bidang teknologi antara pihak instansi dengan pelaksana topik ini.
 \end{enumerate}
 
 \section{Ruang Lingkup}
-Adapun ruang lingkup analisis dan penanganan dari permasalahan yang diangkat pada laporan ini adalah sebagai berikut.
+Agar penelitian tetap terfokus pada permasalahan inti dan tidak meluas pada aspek di luar kapasitas perancangan prototipe, batasan kajian perlu ditegaskan. Adapun ruang lingkup analisis dan penanganan dari permasalahan yang diangkat pada topik ini adalah sebagai berikut:
 \begin{enumerate}
     \item Pengamatan dan analisis dititikberatkan pada alur administrasi dokumen pengajuan klaim BPJS Kesehatan.
     \item Laporan ini terbatas pada tahap identifikasi masalah administratif dan perancangan rekomendasi sistem, serta tidak mencakup tahap implementasi secara penuh maupun pengujian langsung pada lingkungan rumah sakit.
@@ -57,11 +59,22 @@ Adapun ruang lingkup analisis dan penanganan dari permasalahan yang diangkat pad
 \end{enumerate}
 
 \section{Sistematika Penulisan}
-Kegiatan yang dilakukan untuk menyelesaikan Praktik Kerja Lapangan ini adalah identifikasi masalah, menentukan tujuan, melakukan studi literatur, pengumpulan data, analisis serta evaluasi. Seluruh kegiatan tersebut didokumentasikan dalam sistematika penulisan sebagai berikut.
+Untuk memudahkan penelusuran materi serta memahami alur pembahasan secara menyeluruh, dokumen laporan disusun dengan struktur yang sistematis. Kegiatan yang dilakukan untuk menyelesaikan topik ini adalah identifikasi masalah, menentukan tujuan, melakukan studi literatur, pengumpulan data, analisis serta evaluasi. Seluruh kegiatan tersebut didokumentasikan dalam sistematika penulisan sebagai berikut:
 
-\butirbab{Bab I Pendahuluan}{Bab ini memuat latar belakang pelaksanaan kegiatan, rumusan masalah, tujuan, manfaat, ruang lingkup beserta batasannya, dan sistematika penulisan laporan PKL.}
-\butirbab{Bab II Gambaran Umum Instansi}{Bab ini berfungsi sebagai pembuka yang memperkenalkan instansi tempat PKL dilaksanakan. Isinya mencakup sejarah singkat, visi dan misi, serta struktur organisasi instansi.}
-\butirbab{Bab III Landasan Teori}{Bab ini menguraikan teori-teori yang menjadi dasar penyusunan laporan PKL. Teori tersebut dirujuk dari buku, jurnal, regulasi, maupun standar yang relevan.}
-\butirbab{Bab IV Metode Penelitian}{Bab ini menjabarkan pelaksanaan PKL, meliputi gambaran permasalahan yang dihadapi, tahapan penyelesaiannya, serta metode yang dipakai.}
-\butirbab{Bab V Hasil Implementasi}{Bab ini menyajikan hasil analisis dan perancangan, serta pembahasan mengenai sejauh mana tujuan tercapai, dengan merujuk pada teori dan penelitian terdahulu.}
-\butirbab{Bab VI Kesimpulan dan Saran}{Bab ini berisi kesimpulan sebagai jawaban atas rumusan masalah yang telah ditetapkan, serta saran-saran yang berkaitan dengan isi laporan.}
+\subsection{Bab I Pendahuluan}
+Bab ini memuat latar belakang pelaksanaan kegiatan, rumusan masalah, tujuan, manfaat, ruang lingkup beserta batasannya, dan sistematika penulisan laporan mengenai topik ini.
+
+\subsection{Bab II Gambaran Umum Instansi}
+Bab ini berfungsi sebagai pembuka yang memperkenalkan instansi tempat pelaksanaan topik ini. Isinya mencakup sejarah singkat, visi dan misi, serta struktur organisasi instansi.
+
+\subsection{Bab III Landasan Teori}
+Bab ini menguraikan teori-teori yang menjadi dasar penyusunan laporan mengenai topik ini. Teori tersebut dirujuk dari buku, jurnal, regulasi, maupun standar yang relevan.
+
+\subsection{Bab IV Metode Penelitian}
+Bab ini menjabarkan pelaksanaan topik ini, meliputi gambaran permasalahan yang dihadapi, tahapan penyelesaiannya, serta metode yang dipakai.
+
+\subsection{Bab V Hasil Implementasi}
+Bab ini menyajikan hasil analisis dan perancangan, serta pembahasan mengenai sejauh mana tujuan tercapai, dengan merujuk pada teori dan penelitian terdahulu.
+
+\subsection{Bab VI Kesimpulan dan Saran}
+Bab ini berisi kesimpulan sebagai jawaban atas rumusan masalah yang telah ditetapkan, serta saran-saran yang berkaitan dengan isi laporan.

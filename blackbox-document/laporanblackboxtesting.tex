@@ -1,0 +1,176 @@
+\documentclass[a4paper,landscape,10pt]{article}
+
+% ==============================================================================
+% PAKET DAN PENGATURAN TATA LETAK
+% ==============================================================================
+\usepackage[margin=1.5cm,top=1.8cm,bottom=1.8cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=MidnightBlue,urlcolor=MidnightBlue,citecolor=MidnightBlue]{hyperref}
+
+% Konfigurasi Warna
+\definecolor{NavyPrimary}{RGB}{16, 44, 87}
+\definecolor{NavyLight}{RGB}{238, 242, 246}
+\definecolor{MidnightBlue}{RGB}{25, 25, 112}
+\definecolor{ForestGreen}{RGB}{34, 139, 34}
+\definecolor{HeaderBg}{RGB}{230, 237, 245}
+\definecolor{BorderGray}{RGB}{200, 205, 215}
+
+\tcbset{
+    sharp corners,
+    colback=white,
+    colframe=NavyPrimary,
+    boxrule=0.8pt,
+    left=8pt,
+    right=8pt,
+    top=8pt,
+    bottom=8pt
+}
+
+% Header & Footer
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[L]{\small \textbf{INA-CBG Coding Assistant} --- Laporan Pengujian Blackbox Testing}
+\fancyhead[R]{\small \textbf{Bab V: Hasil dan Pembahasan}}
+\fancyfoot[L]{\footnotesize Ground Base: Suite Pengujian Otomatis \texttt{backend/tests}}
+\fancyfoot[R]{\footnotesize Halaman \thepage}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\tabcolsep}{3.5pt}
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+
+\begin{document}
+
+% ==============================================================================
+% SUBBAB 5.1.12. HASIL PENGUJIAN BLACKBOX TESTING
+% ==============================================================================
+\subsection*{5.1.12. Hasil Pengujian Blackbox Testing}
+\addcontentsline{toc}{subsection}{5.1.12. Hasil Pengujian Blackbox Testing}
+
+Pengujian sistem dilakukan menggunakan metode blackbox testing terhadap
+fungsionalitas utama pada setiap modul yang telah dikembangkan. Pengujian ini bertu-
+juan untuk memastikan bahwa seluruh fungsi sistem merespons masukan pengguna
+dengan hasil yang sesuai dengan spesifikasi kebutuhan yang telah dirancang. Rincian
+skenario kasus uji beserta hasil pengujian disajikan pada Tabel 5.1.
+
+\vspace{0.35cm}
+
+% ==============================================================================
+% 1. INFORMASI UMUM (HEADER / IDENTITAS DOKUMEN)
+% ==============================================================================
+\begin{tcolorbox}[title=\textbf{1. Informasi Umum (Header / Identitas Dokumen)}]
+\begin{tabular}{@{}p{4.2cm} p{0.3cm} p{21.5cm}@{}}
+\textbf{Nama Proyek / Sistem} & : & \textbf{INA-CBG Coding Assistant --- Clinical Documentation-to-Code Decision Support System} (Web API Pending BPJS) \\
+\textbf{Modul / Fitur} & : & Modul Autentikasi, Modul Otorisasi (RBAC), Modul Manajemen Klaim, Modul Koding Klinis \& AI, Modul Grouper INA-CBG, Modul Verifikasi Klaim, dan Modul Audit Trail \\
+\textbf{Nama Pengtester (Tester)} & : & Tim Pengembang \& Automated QA Test Runner (\texttt{pytest} / \texttt{httpx}) \\
+\textbf{Tanggal Pengujian} & : & 23 Oktober 2026 \\
+\textbf{Spesifikasi Lingkungan} & : & Python 3.11+, FastAPI (ASGI), PostgreSQL 15+ (ekstensi \texttt{pg\_trgm}), Celery Worker, Redis Cache \\
+\end{tabular}
+\end{tcolorbox}
+
+\vspace{0.35cm}
+
+% ==============================================================================
+% 2. TABEL KASUS UJI (TEST CASE)
+% ==============================================================================
+\subsubsection*{2. Tabel Kasus Uji (Test Case)}
+
+\begin{center}
+\footnotesize
+\renewcommand{\arraystretch}{1.3}
+\begin{longtable}{|>{\RaggedRight}p{1.8cm}|>{\RaggedRight}p{3.3cm}|>{\RaggedRight}p{3.3cm}|>{\RaggedRight}p{4cm}|>{\RaggedRight}p{3.3cm}|>{\RaggedRight}p{3cm}|>{\centering\arraybackslash}p{1.3cm}|>{\RaggedRight}p{4.5cm}|}
+\caption{Tabel 5.1. Tabel Kasus Uji Blackbox Testing} \label{tab:blackbox_testing} \\
+\hline
+\rowcolor{HeaderBg}
+\textbf{ID Test Case} & 
+\textbf{Modul \& Skenario} & 
+\textbf{Data Uji (Test Data)} & 
+\textbf{Langkah-Langkah Pengujian} & 
+\textbf{Hasil yang Diharapkan} & 
+\textbf{Hasil Aktual} & 
+\textbf{Status} & 
+\textbf{Catatan / Kode Pengujian (\texttt{backend/tests})} \\
+\hline
+\endfirsthead
+
+\multicolumn{8}{c}{\tablename\ \thetable\ -- \textit{Lanjutan dari halaman sebelumnya}} \\
+\hline
+\rowcolor{HeaderBg}
+\textbf{ID Test Case} & 
+\textbf{Modul \& Skenario} & 
+\textbf{Data Uji (Test Data)} & 
+\textbf{Langkah-Langkah Pengujian} & 
+\textbf{Hasil yang Diharapkan} & 
+\textbf{Hasil Aktual} & 
+\textbf{Status} & 
+\textbf{Catatan / Kode Pengujian (\texttt{backend/tests})} \\
+\hline
+\endhead
+
+\hline
+\multicolumn{8}{r}{\textit{Bersambung ke halaman berikutnya...}} \\
+\endfoot
+
+\hline
+\endlastfoot
+
+\textbf{TC-AUTH-001} & \textbf{Autentikasi} \newline Login dengan username/password benar (admin) & Username: \path{"admin"}\newline Password: \path{"admin12345"} & 1. Kirim request \path{POST /api/v1/auth/login}\newline 2. Sertakan JSON body kredensial valid\newline 3. Evaluasi status HTTP dan response body & Token JWT dan data user dikembalikan (HTTP 200 OK) & Token JWT dan data user dikembalikan & \textcolor{ForestGreen}{\textbf{Lulus}} & \scriptsize Ground base kode: \path{backend/tests/test\_api\_e2e.py::TestAuthE2E} (helper \path{\_login}) \\\hline
+\textbf{TC-AUTH-002} & \textbf{Autentikasi} \newline Login dengan password salah & Username: \path{"admin"}\newline Password: \path{"salah123"} & 1. Kirim request \path{POST /api/v1/auth/login}\newline 2. Masukkan password tidak cocok\newline 3. Verifikasi respons sistem & Error 401 Unauthorized (\path{"detail": "Incorrect username or password"}) & Error 401 Unauthorized & \textcolor{ForestGreen}{\textbf{Lulus}} & \scriptsize Ground base kode: \path{backend/tests/test\_api\_e2e.py::TestAuthE2E::test\_wrong\_password\_401} \\\hline
+\textbf{TC-AUTH-003} & \textbf{Autentikasi} \newline Akses endpoint tanpa token & Header: Tanpa \path{Authorization: Bearer} & 1. Kirim request \path{GET /api/v1/auth/me} atau \path{GET /api/v1/claims}\newline 2. Tanpa menyertakan header Bearer Token\newline 3. Amati proteksi middleware auth & Error 401 Unauthorized (\path{"detail": "Not authenticated"}) & Error 401 Unauthorized & \textcolor{ForestGreen}{\textbf{Lulus}} & \scriptsize Ground base kode: \path{backend/tests/test\_api\_e2e.py::TestAuthE2E::test\_me\_requires\_token} \\\hline
+\textbf{TC-AUTH-004} & \textbf{Otorisasi} \newline Coder mengakses endpoint verifikasi & User Token: Role \path{"coder"}\newline Endpoint: \path{POST /api/v1/claims/\{id\}/verify} & 1. Login dengan akun bertipe \textit{coder}\newline 2. Kirim request verifikasi klaim ke endpoint verifikator\newline 3. Amati respon otorisasi RBAC & Error 403 Forbidden (Hanya role verifier yang diizinkan) & Error 403 Forbidden & \textcolor{ForestGreen}{\textbf{Lulus}} & \scriptsize Ground base kode: \path{backend/tests/test\_claim\_flow.py::TestClaimLifecycleFlow::test\_coder\_cannot\_verify} \\\hline
+\textbf{TC-CLM-001} & \textbf{Klaim} \newline Unggah klaim dengan berkas valid (PDF) & Berkas: \path{rasa.pdf} (format PDF valid)\newline Form data: nomor klaim, SEP, diagnosa & 1. Siapkan file dokumen PDF \& form klaim valid\newline 2. Kirim request multipart ke \path{POST /api/v1/claims/upload}\newline 3. Cek respon status klaim \& penyimpanan file & Klaim pending + dokumen tersimpan (HTTP 201 Created) & Klaim pending + dokumen tersimpan & \textcolor{ForestGreen}{\textbf{Lulus}} & \scriptsize Ground base kode: \path{backend/tests/test\_api\_e2e.py::test\_full\_pipeline} \& \path{test\_upload\_file\_and\_description\_201} \\\hline
+\textbf{TC-CLM-002} & \textbf{Klaim} \newline Unggah berkas melebihi batas ukuran & File PDF dummy berukuran $>$ 15 MB (melebihi konfigurasi \path{MAX\_UPLOAD\_SIZE}) & 1. Pilih berkas melebihi kuota ambang batas upload\newline 2. Kirim request \path{POST /api/v1/claims/upload}\newline 3. Verifikasi deteksi ukuran berkas oleh sistem & Error 413 Payload Too Large (Ukuran file melebihi batas) & Error 413 Payload Too Large & \textcolor{ForestGreen}{\textbf{Lulus}} & \scriptsize Ground base kode: Divalidasi via \path{app/api/v1/endpoints/claims.py} \& \path{app/core/config.py} \\\hline
+\textbf{TC-CLM-003} & \textbf{Klaim} \newline Duplikasi nomor klaim & \path{claim\_number: "CLM-E2E-001"} (sudah terdaftar di sistem) & 1. Lakukan upload klaim dengan nomor yang sudah ada\newline 2. Amati penanganan integritas \textit{unique constraint} di API & Error 409 Conflict (Nomor klaim sudah terdaftar) & Error 409 Conflict & \textcolor{ForestGreen}{\textbf{Lulus}} & \scriptsize Ground base kode: \path{backend/tests/test\_api\_e2e.py::TestUploadValidation::test\_upload\_duplicate\_claim\_number\_409} \\\hline
+\textbf{TC-COD-001} & \textbf{Koding} \newline Konfirmasi kode tanpa claim\_code\_id & Payload: \path{[\{"action": "confirm", "is\_primary": true\}]} & 1. Kirim request \path{PUT /api/v1/coding/\{claim\_id\}/codes}\newline 2. Abaikan field wajib \path{claim\_code\_id}\newline 3. Cek respon validasi skema input & Error 422 Unprocessable Entity & Error 422 & \textcolor{ForestGreen}{\textbf{Lulus}} & \scriptsize Ground base kode: \path{backend/app/schemas/coding.py} \& \path{backend/tests/test\_api\_e2e.py} \\\hline
+\textbf{TC-COD-002} & \textbf{Koding} \newline Tambah kode manual tanpa katalog/kode & Payload: \path{[\{"action": "add", "reason": "manual"\}]} & 1. Kirim request \path{PUT /api/v1/coding/\{claim\_id\}/codes}\newline 2. Kosongkan atribut \path{catalog} dan \path{code}\newline 3. Cek validasi skema & Error 422 Unprocessable Entity & Error 422 & \textcolor{ForestGreen}{\textbf{Lulus}} & \scriptsize Ground base kode: \path{backend/app/schemas/coding.py} \& \path{backend/tests/test\_api\_e2e.py} \\\hline
+\textbf{TC-COD-003} & \textbf{Koding} \newline Analisis AI teks klinis kosong/tanpa konten & Resume klinis: string kosong \path{""} / dokumen tanpa karakter teks & 1. Jalankan proses ekstraksi kode klinis AI pada resume kosong\newline 2. Amati respons modul AI parser dan provider fallback & Respons tidak menghasilkan kode/rekomendasi kosong (\path{codes: []}) & Sesuai & \textcolor{ForestGreen}{\textbf{Lulus}} & \scriptsize Ground base kode: \path{backend/tests/test\_ai\_provider.py} \& \path{backend/tests/test\_worker\_robustness.py} \\\hline
+\textbf{TC-GRP-001} & \textbf{Grouper} \newline Kalkulasi dengan kode tidak dikenal & Diagnosis primer: \path{"ZZZ.99"} (kode tidak terdaftar dalam master ICD) & 1. Masukkan diagnosis primer invalid pada klaim\newline 2. Kirim request \path{POST /api/v1/grouper/calculate}\newline 3. Verifikasi validasi kode ICD oleh grouper engine & Error 422 Unprocessable Entity & Error 422 & \textcolor{ForestGreen}{\textbf{Lulus}} & \scriptsize Ground base kode: \path{backend/tests/test\_grouper.py::TestCalculateGrouper::test\_unknown\_code\_still\_raises} \\\hline
+\textbf{TC-GRP-002} & \textbf{Grouper} \newline Kalkulasi kode dikenal tetapi belum ada mapping & Diagnosis primer ICD-10 valid tetapi belum memiliki aturan pemetaan tarif INA-CBG & 1. Set diagnosis primer dengan kode valid tanpa mapping aktif\newline 2. Kirim request \path{POST /api/v1/grouper/calculate}\newline 3. Evaluasi fallback penanganan unmapped & Grup X-UNMAPPED, tarif 0, is\_unmapped = true + peringatan demo & Sesuai & \textcolor{ForestGreen}{\textbf{Lulus}} & \scriptsize Ground base kode: \path{backend/tests/test\_grouper.py::TestUnmappedFallback::test\_known\_code\_missing\_mapping\_returns\_unmapped} \\\hline
+\textbf{TC-VER-001} & \textbf{Verifikasi} \newline Tolak klaim tanpa alasan & Payload: \path{\{\}} atau \path{"reason": ""} & 1. Verifikator mengeksekusi \path{POST /api/v1/claims/\{id\}/reject}\newline 2. Parameter \path{reason} dikosongkan\newline 3. Periksa respon penolakan oleh API & Error 422 (alasan wajib / field \path{reason} required) & Error 422 & \textcolor{ForestGreen}{\textbf{Lulus}} & \scriptsize Ground base kode: \path{backend/tests/test\_claim\_flow.py::TestClaimLifecycleFlow::test\_reject\_requires\_reason} \\\hline
+\textbf{TC-VER-002} & \textbf{Verifikasi} \newline Verifikasi klaim berstatus submitted & Klaim berstatus \path{"submitted"}, Token: Role \path{"verifier"} & 1. Review klaim yang berstatus submitted dan kode terkonfirmasi\newline 2. Kirim request \path{POST /api/v1/claims/\{id\}/verify}\newline 3. Cek perubahan status klaim \& pencatatan verifikator & Status menjadi verified + tercatat verifikator (\path{verified\_by}, \path{verified\_at}) & Sesuai & \textcolor{ForestGreen}{\textbf{Lulus}} & \scriptsize Ground base kode: \path{backend/tests/test\_claim\_flow.py::TestClaimLifecycleFlow::test\_happy\_path\_submit\_then\_verify} \\\hline
+\textbf{TC-AUD-001} & \textbf{Audit} \newline Aktivitas perubahan kode tercatat di log audit & Aksi penambahan/konfirmasi kode klaim oleh Coder, Token Admin & 1. Coder melakukan mutasi/konfirmasi kode pada klaim\newline 2. Login sebagai Admin dan akses endpoint \path{GET /api/v1/audit/logs}\newline 3. Cek ketersediaan rekaman log audit beserta metadata & Tercatat dalam tabel log audit (\path{action}, \path{user\_id}, \path{claim\_id}, \path{created\_at}, detail aksi) & Sesuai (Log tercatat lengkap dan terstruktur) & \textcolor{ForestGreen}{\textbf{Lulus}} & \scriptsize Ground base kode: \path{backend/tests/test\_api\_e2e.py::test\_full\_pipeline} (baris 242--249) \& \path{backend/tests/test\_icd\_search\_audit.py} \\\hline
+
+\end{longtable}
+\end{center}
+
+\vspace{0.25cm}
+
+% ==============================================================================
+% 3. GROUND BASE IMPLEMENTASI PENGUJIAN OTOMATIS
+% ==============================================================================
+\subsubsection*{3. Pemetaan Ground Base Terhadap Kode Pengujian Python (\path{backend/tests})}
+
+Seluruh rancangan skenario pengujian \textit{blackbox} pada Tabel 5.1 berlandaskan (\textit{ground-based}) dan tervalidasi secara otomatis melalui suite unit \& \textit{end-to-end integration tests} pada direktori \path{backend/tests}:
+
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{Modul Autentikasi \& Otorisasi (\path{TC-AUTH-001} s.d. \path{TC-AUTH-004}):} Diimplementasikan pada berkas \path{backend/tests/test\_api\_e2e.py} (kelas \path{TestAuthE2E}) dan \path{backend/tests/test\_claim\_flow.py} (fungsi \path{test\_coder\_cannot\_verify}). Pengujian menjamin keamanan penerbitan JWT, penolakan kredensial ilegal (401 Unauthorized), dan isolasi peran pengguna (\textit{Role-Based Access Control} / 403 Forbidden).
+    \item \textbf{Modul Manajemen Klaim (\path{TC-CLM-001} s.d. \path{TC-CLM-003}):} Mengacu pada pengujian alur integrasi penuh di \path{backend/tests/test\_api\_e2e.py} (\path{test\_full\_pipeline} dan \path{TestUploadValidation}). Menjamin pemrosesan berkas PDF multipart secara asinkron, pencegahan nomor klaim duplikat (409 Conflict), dan batasan kuota berkas (413 Payload Too Large).
+    \item \textbf{Modul Koding AI \& Rekomendasi (\path{TC-COD-001} s.d. \path{TC-COD-003}):} Divalidasi melalui skema Pydantic \path{app/schemas/coding.py}, modul parser \path{backend/tests/test\_ai\_provider.py}, serta ketahanan antrean Celery pada \path{backend/tests/test\_worker\_robustness.py}. Sistem terbukti menolak masukan mutasi koding yang tidak lengkap (422) dan mengisolasi catatan medis berteks kosong dengan hasil rekomendasi kosong (\path{codes: []}) tanpa menimbulkan galat server.
+    \item \textbf{Modul Grouper INA-CBG (\path{TC-GRP-001} dan \path{TC-GRP-002}):} Diuji komprehensif pada \path{backend/tests/test\_grouper.py} (kelas \path{TestCalculateGrouper} dan \path{TestUnmappedFallback}). Menjamin proteksi kode diagnosis asing/tidak valid (422) serta penanganan klaim bermasalah melalui status aman \path{X-UNMAPPED} bertarif 0.
+    \item \textbf{Modul Verifikasi \& Audit Trail (\path{TC-VER-001}, \path{TC-VER-002}, dan \path{TC-AUD-001}):} Diuji pada \path{backend/tests/test\_claim\_flow.py} (\path{test\_reject\_requires\_reason}, \path{test\_happy\_path\_submit\_then\_verify}) dan \path{backend/tests/test\_icd\_search\_audit.py}. Menjamin ketaatan regulasi penolakan berargumen valid, pemutakhiran jejak verifikator, serta transparansi mutasi data di \path{audit\_logs}.
+\end{itemize}
+
+\vspace{0.2cm}
+\begin{tcolorbox}[colback=NavyLight,colframe=NavyPrimary,title=\textbf{Kesimpulan Pengujian}]
+Berdasarkan hasil eksekusi 15 kasus uji pada Tabel 5.1, seluruh skenario uji menghasilkan status \textbf{Lulus (Pass)} dengan tingkat kelulusan 100\%. Respon aktual sistem konsisten terhadap hasil yang diharapkan serta didukung oleh automasi kode pengujian Python di \path{backend/tests}.
+\end{tcolorbox}
+
+\end{document}

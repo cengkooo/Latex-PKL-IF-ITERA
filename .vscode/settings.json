@@ -1,0 +1,25 @@
+{
+    "latex-workshop.latex.tools": [
+        {
+            "name": "xelatex",
+            "command": "D:\\LaTex\\miktex\\bin\\x64\\xelatex.exe",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ]
+        }
+    ],
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "xelatex",
+            "tools": [
+                "xelatex"
+            ]
+        }
+    ],
+    "latex-workshop.latex.env": {
+        "PATH": "D:\\LaTex\\miktex\\bin\\x64;D:\\LaTex\\miktex;${env:PATH}"
+    }
+}

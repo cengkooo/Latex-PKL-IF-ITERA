@@ -1,64 +1,410 @@
 %==============================================================================
 % BAB IV: METODE PENELITIAN
-% [Catatan]: Rincian subbab dapat disesuaikan dengan output pekerjaan PKL Anda.
 %==============================================================================
 \chapter{Metode Penelitian}
 
-\pet{Pada bagian ini dijelaskan mengenai pelaksanaan PKL meliputi deskripsi persoalan, alur proses penyelesaian, gambaran umum, dan metodologi pengembangan dari perangkat lunak, keras, sistem, dan prototype yang dikembangkan atau dibangun. Adapun rincian dari substansi pada Bab IV adalah sebagai subbab berikut, tetapi subbab dapat disesuaikan kembali dengan output yang anda kerjakan pada tempat kerja praktek anda.}
+\section{Analisis Permasalahan}
+Analisis permasalahan dilakukan melalui pengamatan secara langsung terhadap proses pengajuan klaim dan kegiatan koding di rumah sakit tempat pelaksanaan Praktik Kerja Lapangan (PKL), serta berdiskusi dengan petugas koding dan staf terkait. Berdasarkan pengamatan tersebut, proses bisnis pengajuan klaim yang berjalan adalah sebagai berikut:
+\begin{enumerate}
+  \item Dokter menuliskan resume medis pasien (diketik maupun tulisan tangan) sebagai ringkasan pelayanan rawat inap;
+  \item Petugas koding membaca resume medis, menentukan diagnosis utama dan diagnosis sekunder, lalu menerjemahkannya menjadi kode ICD-10;
+  \item Petugas koding menentukan prosedur/tindakan medis dan mengodekannya menggunakan ICD-9-CM;
+  \item Rumah sakit mengajukan klaim kepada BPJS Kesehatan melalui aplikasi klaim dengan melampirkan resume medis dan kode diagnosis/prosedur;
+  \item Verifikator BPJS memeriksa kelengkapan berkas dan kesesuaian kode; apabila ditemukan ketidaksesuaian atau berkas tidak lengkap, klaim berstatus pending dan dikembalikan ke rumah sakit untuk diperbaiki.
+\end{enumerate}
 
-\pet{Caption tabel dan gambar ditulis dengan format <bab>.<urutan tabel/gambar>. Caption tabel berada di atas tabel, sedangkan caption gambar berada di bawah gambar.}
+Dari proses tersebut teridentifikasi sejumlah permasalahan sebagai berikut:
+\begin{enumerate}
+  \item Ketergantungan pada pengalaman individu kualitas koding sangat bergantung pada pengetahuan dan pengalaman masing-masing petugas koding, sehingga hasilnya tidak selalu konsisten;
+  \item Beban kerja tinggi pada periode akhir bulan, jumlah resume medis yang harus dikodekan sangat banyak sehingga berisiko menimbulkan kesalahan akibat ketelitian yang menurun;
+  \item Tidak ada pendampingan berbasis pengetahuan petugas tidak memiliki sarana bantu yang dapat memberikan rekomendasi kode beserta bukti pendukung dari isi resume medis secara cepat;
+  \item Kesalahan koding berdampak finansial kode yang tidak tepat menyebabkan klaim dipending atau dikoreksi oleh verifikator, memperlambat pembayaran klaim dan mengganggu arus kas rumah sakit.
+\end{enumerate}
 
-\begin{table}[H]
-  \centering
-  \caption{Contoh \textit{caption} tabel}
-  \spasisatu
-  \setlength{\arrayrulewidth}{1pt}
-  \begin{tabular}{|p{4.35cm}|p{4.35cm}|p{4.35cm}|}
-    \hline
-    \rule{0pt}{14pt} & & \\
-    \hline
-    \rule{0pt}{14pt} & & \\
-    \hline
-    \rule{0pt}{14pt} & & \\
-    \hline
-  \end{tabular}
-\end{table}
+Temuan tersebut sejalan dengan hasil \textit{scoping review} terhadap sembilan artikel penelitian mengenai pending klaim rawat inap BPJS Kesehatan yang merangkum sepuluh faktor penyebab pending klaim, yaitu: (1) ketidaktepatan pemberian koding; (2) ketidaklengkapan berkas administrasi; (3) tidak dilampirkannya hasil pemeriksaan penunjang sebagai pendukung diagnosis; (4) penegakan diagnosis yang tidak sesuai kriteria; (5) perbedaan persepsi standar penegakan diagnosis antara DPJP dengan BPJS Kesehatan; (6) perbedaan sudut pandang mengenai kaidah kode diagnosis antara petugas koding rumah sakit dengan verifikator BPJS Kesehatan; (7) ketidaksesuaian diagnosis utama dengan DPJP; (8) ketidaklengkapan resume medis; (9) belum adanya standar prosedur operasional (SPO) pengelolaan klaim jaminan BPJS Kesehatan; serta (10) pengetahuan petugas pelaksana klaim, sarana dan prasarana di bagian klaim, dan kesalahan input pada aplikasi klaim (\textit{e-claim}) \cite{10}. Dari kesepuluh faktor tersebut, faktor yang berkaitan langsung dengan ketepatan pengodean merupakan penyebab yang dominan; sebagai gambaran, studi di Rumah Sakit Nur Hidayah menunjukkan bahwa 43\% penundaan klaim disebabkan ketidaksesuaian koding, 34\% karena diagnosis tidak tepat sesuai kriteria, dan 23\% akibat berkas yang tidak lengkap \cite{10}. Senada dengan hal itu, analisis terhadap 720 berkas klaim rawat inap di Rumah Sakit Universitas Airlangga menemukan 88 berkas berstatus pending yang disebabkan oleh berkas yang tidak lengkap, koding yang kurang tepat, kurangnya pemeriksaan penunjang, dan kurangnya eviden terapi \cite{16}.
+
+Sejalan dengan hal tersebut, kegiatan pelatihan pengodean kasus pending klaim BPJS di RSU Aisyiyah Padang menunjukkan bahwa pemahaman petugas terhadap aturan pengodean ICD-10 meningkat setelah diberikan edukasi \cite{15}. Temuan itu menegaskan bahwa peningkatan kompetensi petugas koding berperan penting dalam menekan risiko pending klaim, namun edukasi yang bersifat sekali waktu perlu didukung sarana bantu yang dapat digunakan secara berkelanjutan dalam pekerjaan sehari-hari.
+
+Kecenderungan serupa juga tercatat pada literatur internasional. Dong dkk. \cite{6} melaporkan bahwa akurasi koding manual bervariasi antar-studi (rata-rata 83\%, dengan rentang 50--98\%) dan bahwa tumpukan berkas yang menunggu pengodean dapat tertunda hingga lebih dari satu tahun; karena itu, dukungan sistem otomatis yang transparan dan tetap melibatkan koder dipandang sebagai arah yang menjanjikan.
+
+Pada ranah INA-CBG, upaya serupa juga telah dirintis melalui perancangan sistem pendukung keputusan untuk mendukung implementasi INA-CBG, mulai dari identifikasi kebutuhan pengguna hingga evaluasi prototipe antarmuka \cite{18}. Meskipun demikian, penelitian tersebut berhenti pada tahap perancangan sehingga belum menghasilkan sistem yang terhubung dengan pekerjaan koding dan pengajuan klaim sehari-hari di rumah sakit. Celah inilah yang diisi oleh penelitian ini melalui pembangunan sistem yang mengintegrasikan analisis AI atas resume medis, keputusan koder, serta perhitungan grup dan tarif INA-CBG.
+
+Berdasarkan analisis tersebut, dirumuskan kebutuhan akan sebuah sistem pendukung keputusan berbasis web yang mampu membantu petugas koding mengekstrak temuan klinis dari resume medis, merekomendasikan kode ICD-10 dan ICD-9-CM yang sesuai beserta tingkat keyakinan dan bukti pendukung, serta menghitung estimasi grup dan tarif INA-CBG sehingga klaim yang diajukan lebih akurat dan risiko pending dapat ditekan.
+
+\section{Alur Penyelesaian}
+Untuk menyelesaikan permasalahan tersebut, maka diperlukan alur penyelesaian yang sistematis sebagai berikut:
+\begin{enumerate}
+  \item Identifikasi masalah dan studi literatur mempelajari konsep \textit{pending claim} BPJS, koding ICD-10/ICD-9-CM, INA-CBG, \textit{decision support system}, serta teknologi yang relevan;
+  \item Pengumpulan data observasi proses koding dan klaim di rumah sakit, mengumpulkan dokumen atau artikel penelitian yang relevan, serta meninjau literatur terkait;
+  \item Analisis kebutuhan sistem untuk merumuskan kebutuhan fungsional dan non-fungsional sistem berdasarkan permasalahan yang ditemukan;
+  \item Perancangan sistem merancang arsitektur sistem, diagram \textit{use case}, \textit{activity diagram}, dan \textit{sequence diagram};
+  \item Implementasi sistem membangun sistem secara bertahap menggunakan metode Scrum;
+  \item Pengujian sistem melakukan \textit{blackbox testing} terhadap fungsionalitas sistem serta pengujian otomatis API;
+  \item Evaluasi dan analisis hasil menilai sejauh mana sistem membantu proses koding dan menyusun kesimpulan serta saran perbaikan.
+\end{enumerate}
+
+Alur penyelesaian permasalahan tersebut diilustrasikan secara sistematis pada Gambar~\ref{fig:alur-penyelesaian}.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=5.95cm,height=4.47cm]{figure/contoh-gambar.png}
-  \caption{Contoh \textit{caption} gambar}
+  \begin{tikzpicture}[
+    node distance=0.42cm and 0.5cm,
+    flowstep/.style={
+      rectangle,
+      rounded corners=3pt,
+      draw=black,
+      thick,
+      fill=white,
+      text width=9cm,
+      minimum height=0.95cm,
+      align=center,
+      font=\small,
+      inner sep=4pt
+    },
+    decision/.style={
+      diamond,
+      draw=black,
+      thick,
+      fill=white,
+      aspect=2.2,
+      text width=2.4cm,
+      align=center,
+      font=\small,
+      inner sep=1pt
+    },
+    arrow/.style={
+      thick,
+      -Latex
+    },
+    dasharrow/.style={
+      thick,
+      dashed,
+      -Latex
+    }
+  ]
+
+  \node[flowstep] (step1) {\textbf{1. Identifikasi Masalah dan Studi Literatur}\\\scriptsize Mempelajari konsep \textit{pending claim} BPJS, koding ICD-10/ICD-9-CM, INA-CBG, \textit{decision support system}, serta teknologi relevan};
+
+  \node[flowstep, below=of step1] (step2) {\textbf{2. Pengumpulan Data}\\\scriptsize Observasi proses koding dan klaim di rumah sakit, pengumpulan dokumen/artikel penelitian relevan, serta studi literatur};
+
+  \node[flowstep, below=of step2] (step3) {\textbf{3. Analisis Kebutuhan Sistem}\\\scriptsize Perumusan kebutuhan fungsional dan non-fungsional sistem berdasarkan permasalahan yang ditemukan};
+
+  \node[flowstep, below=of step3] (step4) {\textbf{4. Perancangan Sistem}\\\scriptsize Merancang arsitektur sistem, diagram \textit{use case}, \textit{activity diagram}, dan \textit{sequence diagram}};
+
+  \node[flowstep, below=of step4] (step5) {\textbf{5. Implementasi Sistem}\\\scriptsize Membangun sistem perangkat lunak secara bertahap menggunakan metode Scrum};
+
+  \node[flowstep, below=of step5] (step6) {\textbf{6. Pengujian Sistem}\\\scriptsize Pengujian fungsionalitas dengan \textit{blackbox testing} dan pengujian otomatis API};
+
+  \node[decision, below=of step6] (dec) {Sistem Sesuai?};
+
+  \node[flowstep, below=of dec] (step7) {\textbf{7. Evaluasi dan Analisis Hasil}\\\scriptsize Menilai efektivitas sistem dalam membantu proses koding serta penyusunan kesimpulan dan saran};
+
+  \draw[arrow] (step1) -- (step2);
+  \draw[arrow] (step2) -- (step3);
+  \draw[arrow] (step3) -- (step4);
+  \draw[arrow] (step4) -- (step5);
+  \draw[arrow] (step5) -- (step6);
+  \draw[arrow] (step6) -- (dec);
+  \draw[arrow] (dec) -- node[right, font=\scriptsize] {Ya} (step7);
+
+  \draw[dasharrow] (dec.west) -- node[above, font=\scriptsize] {Tidak} ([xshift=-0.8cm]step5.west |- dec.west) |- (step5.west);
+
+  \end{tikzpicture}
+  \caption{Alur Penyelesaian Permasalahan}\label{fig:alur-penyelesaian}
 \end{figure}
 
-\section{Analisis Permasalahan}
-\pet{Tuliskan analisis dari persoalan yang harus diselesaikan dalam kerja praktek, termasuk usulan solusi untuk persoalan tersebut. Sesuaikan dengan latar belakang persoalan, deskripsi persoalan, batasan yang harus diselesaikan dalam PKL, teknologi terkait yang mendukung solusi dari persoalan, dan hal lain yang terkait dengan persoalan PKL.}
-
-\section{Alur Penyelesaian}
-\pet{Tuliskan alur penyelesaian PKL anda dengan detail, dari mulai observasi, identifikasi masalah, perumusan masalah, pemilihan metode, implementasi, pengujian, dan penarikan kesimpulan. Supaya lebih tergambar dengan jelas, bisa dengan menggunakan \textit{flowchart}.}
+Berdasarkan Gambar~\ref{fig:alur-penyelesaian}, alur penyelesaian permasalahan disusun ke dalam tujuh tahapan utama yang terstruktur dan berkesinambungan. Tahap awal difokuskan pada identifikasi masalah operasional klaim dan studi literatur guna mendalami konsep klaim tertunda (\textit{pending claim}), standardisasi koding ICD-10 serta ICD-9-CM, pengelompokan tarif INA-CBG, dan arsitektur sistem pendukung keputusan. Tahap kedua mencakup pengumpulan data melalui observasi langsung di rumah sakit serta penelaahan dokumen pendukung klaim. Pada tahap ketiga, dirumuskan spesifikasi kebutuhan fungsional dan non-fungsional perangkat lunak sebagai dasar pengembangan sistem. Tahap keempat menuangkan kebutuhan tersebut ke dalam rancangan arsitektur dan pemodelan diagram UML yang mencakup \textit{use case}, \textit{activity}, dan \textit{sequence diagram}. Tahap kelima merealisasikan rancangan ke dalam bentuk kode program melalui metode Scrum secara iteratif. Tahap keenam menguji keandalan perangkat lunak menggunakan \textit{blackbox testing} dan pengujian otomatis API. Apabila ditemukan ketidaksesuaian fungsi atau galat, alur pengujian memiliki siklus umpan balik untuk mengembalikan penanganan perbaikan ke tahap implementasi. Setelah sistem terverifikasi bekerja sesuai spesifikasi, alur berlanjut ke tahap ketujuh, yaitu evaluasi manfaat sistem terhadap efisiensi koding serta penarikan kesimpulan dan saran perbaikan.
 
 \section{Gambaran Umum Sistem/Aplikasi/Prototype}
-\pet{Gambarkanlah secara umum terkait arsitektur sistem/aplikasi/prototype yang anda kembangkan. Dapat menggunakan diagram atau gambar sebagai pembantu.}
+Sistem yang dibangun diberi nama INA-CBG Coding Assistant, yaitu Sistem Pendukung Keputusan berbasis web untuk membantu petugas koding rumah sakit dalam menangani klaim BPJS. Secara umum sistem bekerja dengan alur sebagai berikut:
+\begin{enumerate}
+  \item Petugas koding (\textit{coder}) melakukan login menggunakan akun yang terdaftar, kemudian mengunggah berkas klaim berupa resume medis (PDF, DOCX, atau gambar JPG/PNG hasil pindaian) beserta metadata klaim (nomor SEP, data pasien, tanggal masuk/keluar, dan lain-lain);
+  \item Sistem menyimpan berkas ke \textit{object storage} (Cloudflare R2) dan mencatat klaim berstatus pending di basis data;
+  \item API server mengirimkan tugas pemrosesan ke antrian Celery (Redis/Upstash);
+  \item \textit{Worker} Celery mengambil dokumen, melakukan ekstraksi teks secara \textit{local-first} (pdfplumber/python-docx) dengan \textit{vision fallback} (OCR AI) untuk gambar hasil pindaian;
+  \item Teks klinis yang sudah diredaksi dari informasi pribadi pasien (PII) dianalisis oleh model AI (Google Gemini, dengan OpenRouter sebagai \textit{fallback}) untuk menghasilkan rekomendasi kode ICD-10 dan ICD-9-CM lengkap dengan tingkat keyakinan \textit{confidence}, bukti pendukung, dan entitas klinis;
+  \item Petugas koding meninjau rekomendasi tersebut pada antarmuka web, lalu mengambil keputusan: mengonfirmasi, menolak, atau menambahkan kode secara manual;
+  \item Setelah kode terkonfirmasi, sistem menghitung grup INA-CBG dan estimasi tarif melalui mesin \textit{grouper} berbasis aturan, lalu menampilkan hasilnya kepada pengguna;
+  \item Klaim yang telah lengkap dapat diajukan (\textit{submit}) oleh \textit{coder} untuk diverifikasi oleh verifikator, dan seluruh aktivitas tercatat pada log audit untuk keperluan pengawasan.
+\end{enumerate}
+
+Arsitektur sistem secara garis besar terdiri atas:
+\begin{enumerate}
+  \item \textit{Frontend}, aplikasi web ReactJS yang menyediakan halaman login, daftar klaim, detail klaim, dan formulir pengisian/unggah klaim;
+  \item \textit{Backend} API layanan FastAPI yang menyediakan \textit{endpoint} REST untuk autentikasi JWT, manajemen klaim, rekomendasi koding, \textit{grouper} INA-CBG, pencarian ICD, verifikasi, audit, dan metrik \textit{dashboard};
+  \item \textit{Worker} asinkron Celery \textit{worker} yang menangani ekstraksi dokumen dan analisis AI;
+  \item Penyimpanan data basis data PostgreSQL (Supabase) untuk data transaksional, Redis (lokal/Upstash) sebagai \textit{broker} antrian, dan Cloudflare R2 untuk penyimpanan berkas dokumen.
+\end{enumerate}
+
+Sistem menggunakan model peran (\textit{role}) pengguna: admin, coder, verifier, dan auditor, dengan hak akses yang berbeda-beda sesuai kebutuhan. Gambaran arsitektur sistem ditunjukkan pada Gambar 4.2.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=7cm]{figure/diagram/gambar-Alur-Arsitektur-Sistem.png}
+  \caption{Alur Arsitektur Sistem}
+\end{figure}
 
 \section{Alat dan Bahan}
-\pet{Uraikan spesifikasi dari alat dan bahan yang digunakan untuk mendukung pengembangan sistem atau prototype.}
+Alat yang digunakan dalam praktek kerja lapangan ini mencakup perangkat keras (\textit{hardware}) dan perangkat lunak (\textit{software}) yang dipakai selama proses analisis, perancangan, implementasi, hingga pengujian sistem. Bahan praktek kerja lapangan meliputi data dan referensi yang digunakan, antara lain: contoh berkas resume medis (PDF, gambar pindaian, dan DOCX) sebagai bahan uji, data referensi kode ICD-10 dan ICD-9-CM, data pemetaan INA-CBG (dataset demo maupun resmi Kemenkes), serta literatur mengenai BPJS, koding medis, dan rekayasa perangkat lunak.
 
 \subsection{Alat}
-\pet{Alat yang digunakan untuk melakukan pengembangan sistem atau prototype, dapat berupa komputer, PC, Arduino, raspberry, dsb.}
-
+Alat yang digunakan untuk melakukan pengembangan prototype:
 \begin{enumerate}
-  \item Notebook, dengan spesifikasi…
-  \item Smartphone, dengan spesifikasi…
-  \item Software XYZ
+  \item Laptop Xiaomi Redmibook 15 dengan spesifikasi Intel Core i3-1135G4 dan Intel(R) UHD Graphics (128 MB).
+  \item Visual Studio Code
+  \item Git dan GitHub
 \end{enumerate}
 
 \subsection{Bahan}
-\pet{Bahan yang digunakan/diperlukan untuk melakukan pengembangan sistem atau prototype, dapat berupa:}
-
+Bahan yang digunakan/diperlukan untuk melakukan pengembangan sistem atau prototype, dapat berupa:
 \begin{enumerate}
-  \item Dataset pihak pertama yang diperoleh secara langsung, melalui izin instansi.
-  \item Dataset pihak lain yang diperoleh dengan izin atau dalam lisensi yang diizinkan untuk digunakan secara langsung.
-  \item Dataset pihak pertama yang disusun sendiri melalui kuesioner, observasi, atau interview.
+  \item Product Requirements Document (PRD)
+  \item Dokumen perancangan arsitektur teknis dan sumber daya konten awal.
+  \item Dokumen INA-CBG.
 \end{enumerate}
 
 \section{Metodologi Pengembangan}
-\pet{Uraikan secara detail terkait dengan metodologi yang anda gunakan untuk membangun dan mengembangkan sistem atau prototype, termasuk alur pengembangan, desain/diagram sistem, rencana pengembangan, cara pengumpulan data, \textit{low/high fidelity}, dsb.}
+Metodologi pengembangan yang digunakan adalah metode Scrum yang dijalankan dalam siklus \textit{sprint} pendek \cite{20}. Setiap \textit{sprint} dimulai dengan perencanaan (\textit{sprint planning}) untuk memilih item dari \textit{product backlog}, dilanjutkan dengan implementasi fitur, dan diakhiri dengan evaluasi hasil (\textit{sprint review}) serta peninjauan proses (\textit{sprint retrospective}). Metode Scrum dipilih karena proses pengembangan sistem berlangsung secara bertahap, fleksibel terhadap perubahan kebutuhan, serta memerlukan umpan balik berkala dari pengguna di setiap tahap pengembangan.
+
+\subsection{Spesifikasi Kebutuhan Perangkat Lunak}
+Berdasarkan analisis kebutuhan, dirumuskan spesifikasi kebutuhan perangkat lunak sebagai berikut.
+
+\subsubsection{Kebutuhan Fungsional}
+\begin{small}
+\begin{longtable}{|c|>{\raggedright\arraybackslash}p{2.5cm}|>{\raggedright\arraybackslash}p{6.2cm}|>{\raggedright\arraybackslash}p{2.8cm}|}
+\caption{Tabel Kebutuhan Fungsional}\label{tab:kebutuhan-fungsional}\\
+\hline
+\textbf{ID} & \textbf{Nama Fitur} & \textbf{Deskripsi Fungsional} & \textbf{Aktor} \\
+\hline
+\endfirsthead
+\hline
+\textbf{ID} & \textbf{Nama Fitur} & \textbf{Deskripsi Fungsional} & \textbf{Aktor} \\
+\hline
+\endhead
+\hline
+\endfoot
+F-01 & Autentikasi User & Sistem menyediakan autentikasi pengguna (login) dengan skema JWT dan mendukung empat peran: admin, coder, verifier, auditor & Admin, Coder, Verifier, Auditor, Supervisor \\ \hline
+F-02 & Manajemen Pengguna & Admin dapat mendaftarkan dan mengelola akun pengguna & Admin \\ \hline
+F-03 & Unggah Klaim & Coder dapat mengunggah klaim beserta berkas dokumen (PDF/JPG/PNG/DOCX, maksimal 20 MB) dan metadata klaim & Coder, Admin \\ \hline
+F-04 & Penyimpanan Dokumen Klaim & Sistem menyimpan berkas pada \textit{object storage} dan mencatat klaim berstatus `pending' & Sistem \\ \hline
+F-05 & Pemrosesan Dokumen Asinkron & Sistem memproses dokumen secara asinkron (parsing/OCR) dan memperbarui status dokumen serta klaim & Sistem (Celery Worker) \\ \hline
+F-06 & Analisis dan Rekomendasi Kode & Sistem menganalisis teks klinis dan memberikan rekomendasi kode ICD-10/ICD-9-CM dengan \textit{confidence}, \textit{evidence}, dan entitas klinis & Coder, Admin \\ \hline
+F-07 & Redaksi PII & Sistem meredaksi PII (identitas pasien) sebelum data dikirim ke penyedia AI & Sistem \\ \hline
+F-08 & Keputusan Koding & Coder dapat mengonfirmasi, menolak, atau menambahkan kode secara manual pada klaim & Coder, Admin \\ \hline
+F-09 & Perhitungan Grouper INA-CBG & Sistem menghitung grup INA-CBG dan estimasi tarif berdasarkan kode terkonfirmasi serta menampilkan peringatan bila data belum termapping & Coder, Verifier, Admin \\ \hline
+F-10 & Pengajuan Klaim & Coder dapat mengajukan (\textit{submit}) klaim untuk diverifikasi & Coder, Admin \\ \hline
+F-11 & Verifikasi Klaim & Verifier dapat menyetujui (\textit{verify}) atau menolak (\textit{reject}) klaim dengan alasan & Verifier, Supervisor, Admin \\ \hline
+F-12 & Pencarian Kode ICD dan Pemetaan & Sistem menyediakan pencarian kode ICD-10/ICD-9-CM (\textit{keyword} \& \textit{fuzzy}) dan rekomendasi pemetaan ICD-10 ke ICD-9 & Semua pengguna terautentikasi \\ \hline
+F-13 & Pencatatan Log Audit & Sistem mencatat seluruh aktivitas perubahan penting ke dalam log audit & Auditor, Verifier, Admin \\ \hline
+F-14 & Dashboard dan Ekspor Laporan & Sistem menyediakan \textit{dashboard} metrik dan ekspor data ringkasan & Auditor, Verifier, Admin \\ \hline
+F-15 & Indikator Koneksi Layanan & Sistem menyediakan \textit{endpoint health check} yang menampilkan status koneksi pada antarmuka & Sistem \\ \hline
+\end{longtable}
+\end{small}
+
+\subsubsection{Kebutuhan Non-Fungsional}
+\begin{small}
+\begin{longtable}{|c|>{\raggedright\arraybackslash}p{3.6cm}|>{\raggedright\arraybackslash}p{7.9cm}|}
+\caption{Tabel Kebutuhan Non-Fungsional}\label{tab:kebutuhan-non-fungsional}\\
+\hline
+\textbf{ID} & \textbf{Kategori} & \textbf{Deskripsi Kebutuhan} \\
+\hline
+\endfirsthead
+\hline
+\textbf{ID} & \textbf{Kategori} & \textbf{Deskripsi Kebutuhan} \\
+\hline
+\endhead
+\hline
+\endfoot
+NF-01 & Functional Suitability (Kesesuaian Fungsional) & Sistem menyediakan seluruh fungsi yang dibutuhkan proses koding klaim mulai dari unggah dokumen, rekomendasi kode ICD-10/ICD-9-CM, keputusan koding, hingga perhitungan grouper dengan keluaran yang akurat dan lengkap sesuai spesifikasi kebutuhan. \\ \hline
+NF-02 & Performance Efficiency (Efisiensi Kinerja) & Proses berat (ekstraksi dokumen dan analisis AI) dijalankan secara asinkron agar API tetap responsif, dengan batas waktu (\textit{time limit}) pada tugas \textit{worker} sehingga kinerja sistem tetap terjaga. \\ \hline
+NF-03 & Compatibility (Kompatibilitas) & Sistem berbasis web dapat diakses melalui peramban modern pada berbagai perangkat tanpa instalasi tambahan, serta mendukung penyimpanan berkas yang kompatibel dengan API S3. \\ \hline
+NF-04 & Interaction Capability / Usability (Kemampuan Interaksi / Ketergunaan) & Antarmuka berbahasa Indonesia yang sederhana dan mudah dipelajari, dengan indikator status proses (\textit{pending}, \textit{processing}, \textit{completed}, \textit{failed}) yang jelas bagi pengguna. \\ \hline
+NF-05 & Reliability (Keandalan) & Sistem menyediakan mekanisme \textit{auto-failover} penyedia AI, \textit{retry} tugas Celery, serta penanganan kegagalan dokumen melalui fitur \textit{retry} sehingga layanan tetap berjalan saat terjadi gangguan. \\ \hline
+NF-06 & Security (Keamanan) & Sistem menerapkan autentikasi JWT dan otorisasi berbasis peran pada seluruh \textit{endpoint} sensitif, serta meredaksi PII sebelum data dikirim ke penyedia AI eksternal sesuai prinsip perlindungan data kesehatan. \\ \hline
+NF-07 & Maintainability (Kemudahan Pemeliharaan) & Sistem dibangun secara modular (\textit{router}, \textit{service}, \textit{model} terpisah) dengan dokumentasi API otomatis (Swagger) dan pengujian otomatis, sehingga mudah diperbaiki dan dikembangkan. \\ \hline
+NF-08 & Flexibility / Portability (Fleksibilitas / Portabilitas) & Sistem dapat dijalankan pada berbagai lingkungan (lokal maupun \textit{cloud}) dan mudah berpindah penyedia layanan, karena basis data, antrian, penyimpanan objek, serta penyedia AI dapat dikonfigurasi melalui variabel lingkungan. \\ \hline
+NF-09 & Safety (Keselamatan) & Sistem menerapkan prinsip \textit{human-in-the-loop}, yakni rekomendasi AI tidak langsung dipakai sebagai keputusan final melainkan harus dikonfirmasi petugas koding, serta menampilkan peringatan eksplisit ketika tarif belum valid agar tidak menimbulkan kesalahan klaim. \\ \hline
+\end{longtable}
+\end{small}
+
+\subsection{Diagram Rancangan Sistem}
+Perancangan sistem dituangkan dalam beberapa diagram rancangan sebagai berikut.
+
+\subsubsection{Use Case Diagram}
+Use case diagram sistem memetakan aktor dan fungsionalitas utama. Aktor Admin dapat mengelola pengguna dan melihat seluruh data; aktor Coder dapat mengunggah klaim, melihat rekomendasi AI, mengambil keputusan kode, menghitung grouper, dan submit klaim; aktor Verifier dapat melihat daftar klaim yang diajukan, memverifikasi, atau menolak klaim beserta alasannya; aktor Auditor dapat melihat log audit dan dashboard metrik. Diagram use case ditunjukkan pada Gambar 4.3.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=9.5cm]{figure/diagram/Gambar-Diagram-Use-Case.png}
+  \caption{Diagram Use Case}
+\end{figure}
+
+Berdasarkan Gambar 4.3, diagram \textit{use case} mengelompokkan fungsionalitas sistem berdasarkan hak akses empat aktor utama, yaitu \textit{admin}, \textit{coder}, \textit{verifier}, dan \textit{auditor}. Aktor \textit{admin} memiliki wewenang untuk mengelola akun pengguna serta meninjau seluruh data klaim. Aktor \textit{coder} berperan dalam alur operasional utama yang meliputi pengunggahan berkas dokumen klaim, peninjauan rekomendasi kode dari kecerdasan buatan, pengambilan keputusan koding secara mandiri, penelusuran katalog kode, kalkulasi estimasi tarif melalui mesin \textit{grouper}, serta pengajuan klaim untuk diverifikasi. Aktor \textit{verifier} bertugas meninjau kelayakan berkas yang telah diajukan serta mengambil keputusan persetujuan atau penolakan klaim disertai catatan evaluasi. Sementara itu, aktor \textit{auditor} memiliki akses khusus untuk memeriksa rekam jejak aktivitas pada modul \textit{audit log} dan memantau visualisasi metrik kinerja klaim melalui \textit{dashboard} sistem. Seluruh interaksi tersebut diawali dengan mekanisme autentikasi pengguna menggunakan \textit{token} dan dilindungi oleh proses redaksi informasi pribadi pasien sebelum data diproses oleh layanan eksternal.
+
+\subsubsection{Activity Diagram}
+Activity diagram menggambarkan alur aktivitas sistem pada modul-modul utama. Alur proses unggah dan pemrosesan asinkron dokumen klaim, keputusan koding dan kalkulasi grouper INA-CBG, serta verifikasi klaim masing-masing diilustrasikan pada Gambar 4.4, Gambar 4.5, dan Gambar 4.6.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=11cm]{figure/diagram/Gambar-Activity-Diagram-Unggah-Pemrosesan-Klaim.png}
+  \caption{Activity Diagram Unggah \& Pemrosesan Klaim}
+\end{figure}
+
+Alur aktivitas pada Gambar 4.4 menggambarkan tahapan pemrosesan berkas klaim yang berjalan secara asinkron antara antarmuka pengguna, server utama, dan pekerja latar belakang. Proses dimulai ketika aktor \textit{coder} mengunggah berkas resume medis beserta metadata pasien pada aplikasi web. Sistem sisi \textit{frontend} melakukan validasi awal terhadap format dan ukuran berkas sebelum meneruskannya ke layanan \textit{backend API}. Selanjutnya, server menyimpan dokumen ke media \textit{object storage}, mencatat entitas klaim berstatus \textit{pending} pada basis data, serta mendaftarkan tugas pemrosesan ke antrean \textit{task queue}. Komponen \textit{worker Celery} kemudian mengambil tugas dari antrean secara terpisah, menjalankan ekstraksi teks dengan pendekatan \textit{local-first parser} atau \textit{vision fallback} jika dokumen berupa citra hasil pemindaian, lalu melakukan redaksi informasi rahasia pasien. Teks klinis tersebut dikirimkan ke model kecerdasan buatan untuk menghasilkan daftar rekomendasi kode diagnosis dan prosedur beserta bukti teks pendukungnya, sebelum akhirnya status klaim diperbarui dan hasilnya ditampilkan kepada pengguna.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=10cm]{figure/diagram/gambar-Activity-Diagram-Keputusan-Koding-Kalkulasi-Grouper.png}
+  \caption{Activity Diagram Keputusan Koding \& Kalkulasi Grouper}
+\end{figure}
+
+Alur aktivitas pada Gambar 4.5 memodelkan proses verifikasi mandiri oleh koder hingga perhitungan estimasi biaya pelayanan. Setelah berkas selesai dianalisis oleh kecerdasan buatan, aktor \textit{coder} membuka halaman rincian klaim untuk memeriksa rekomendasi kode ICD-10 dan ICD-9-CM beserta kutipan bukti klinis yang diekstrak dari dokumen. Pada tahap evaluasi, koder dapat memilih tindakan konfirmasi untuk menerima rekomendasi yang akurat, melakukan penolakan terhadap kode yang tidak sesuai, atau menambahkan kode diagnosis maupun prosedur lain secara manual melalui pencarian katalog terintegrasi. Setelah penentuan kode disepakati, koder mengeksekusi fitur kalkulasi \textit{grouper}. Mesin penentu aturan sistem akan mencocokkan kombinasi kode terkonfirmasi dengan basis data tarif INA-CBG untuk menghasilkan kelompok kasus dan perkiraan besaran klaim, atau menampilkan status belum terpetakan bila kode belum terdaftar, sebelum seluruh data disimpan secara permanen ke basis data.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=11cm]{figure/diagram/Gambar-ActivityDiagram-VerifikasiKlaim.png}
+  \caption{Activity Diagram Verifikasi Klaim}
+\end{figure}
+
+Alur aktivitas pada Gambar 4.6 menunjukkan mekanisme peninjauan akhir berkas klaim sebelum diajukan ke badan penyelenggara jaminan kesehatan. Tahapan diawali saat \textit{coder} menyerahkan berkas yang telah dikodekan melalui aksi pengajuan, yang secara otomatis mengubah status klaim menjadi siap diverifikasi. Aktor \textit{verifier} kemudian mengakses antrean klaim dan menelaah kelengkapan resume medis, kesesuaian kode klinis, serta hasil pengelompokan tarif. Pada titik keputusan, apabila seluruh berkas dan koding dinilai telah memenuhi standar administratif dan medis, verifikator memberikan persetujuan sehingga status klaim berganti menjadi terverifikasi. Sebaliknya, jika ditemukan ketidaksesuaian atau berkas belum lengkap, verifikator menolak klaim dengan menyertakan alasan penolakan secara tertulis agar koder dapat melakukan perbaikan. Seluruh tindakan dan perubahan status pada alur ini dicatat secara otomatis pada rekam jejak \textit{audit log} demi menjaga transparansi proses.
+
+\subsubsection{Sequence Diagram}
+Sequence diagram menggambarkan interaksi antar-komponen secara kronologis. Skenario utama yang dirancang antara lain alur unggah klaim dan pemrosesan asinkron, alur kalkulasi grouper, serta alur verifikasi klaim sebagaimana ditunjukkan berturut-turut pada Gambar 4.7, Gambar 4.8, dan Gambar 4.9.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=11cm]{figure/diagram/Gambar-Sequence-Diagram-Unggah-Pemrosesan-Klaim.png}
+  \caption{Sequence Diagram Unggah \& Pemrosesan Klaim}
+\end{figure}
+
+Diagram sekuensial pada Gambar 4.7 menguraikan urutan pertukaran pesan berbasis waktu antarkomponen perangkat lunak selama proses pengunggahan berkas berlangsung. Interaksi melibatkan aktor \textit{coder}, modul \textit{frontend}, server \textit{FastAPI}, basis data \textit{PostgreSQL}, \textit{storage Cloudflare R2}, perantara pesan \textit{Redis}, pekerja \textit{Celery}, dan penyedia layanan \textit{AI}. Ketika koder mengirimkan berkas, antarmuka web memanggil \textit{endpoint} API yang segera mengunggah dokumen fisik ke \textit{storage} dan merekam data klaim awal ke basis data. Server kemudian mempublikasikan pesan penugasan ke antrean \textit{Redis} dan langsung mengembalikan respons berhasil ke antarmuka pengguna tanpa menahan koneksi jaringan. Secara terpisah, pekerja \textit{Celery} mengambil pesan tersebut, mengekstrak isi teks berkas dari media penyimpanan, serta meneruskan teks klinis bersih ke layanan \textit{AI}. Hasil rekomendasi kode beserta bukti pendukung yang dikembalikan oleh \textit{AI} selanjutnya disimpan oleh pekerja ke basis data dan status dokumen diperbarui, sehingga pengguna dapat melihat hasil analisis secara langsung saat memuat antarmuka.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=8cm]{figure/diagram/Gambar-Sequence-Diagram-Keputusan-Koding-Kalkulasi-Grouper.png}
+  \caption{Sequence Diagram Keputusan Koding \& Kalkulasi Grouper}
+\end{figure}
+
+Diagram sekuensial pada Gambar 4.8 memperlihatkan kronologi interaksi saat koder menetapkan kode dan melakukan kalkulasi biaya klaim. Komponen yang terlibat meliputi aktor \textit{coder}, antarmuka \textit{web}, server \textit{FastAPI}, basis data, dan modul logika \textit{grouper}. Pada alur pertama, setiap aksi persetujuan, penolakan, maupun penambahan kode manual oleh koder dikirimkan melalui permintaan HTTP ke server, yang memvalidasi masukan, memperbarui entitas kode pada tabel basis data, dan merekam peristiwa perubahan tersebut ke tabel \textit{audit log}. Pada alur kedua, ketika koder menekan fungsi kalkulasi, antarmuka web memicu pemanggilan \textit{endpoint grouper} pada server. Server mengambil seluruh daftar kode yang telah berstatus terkonfirmasi dari basis data, menjalankannya melalui algoritma pencocokan aturan tarif INA-CBG, menyimpan hasil perhitungan kelompok kasus dan estimasi nominal klaim ke basis data, lalu mengirimkan struktur data keluaran kembali ke antarmuka web untuk disajikan kepada koder.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=8cm]{figure/diagram/Gambar-Sequence-Diagram-Verifikasi-Klaim.png}
+  \caption{Sequence Diagram Verifikasi Klaim}
+\end{figure}
+
+Diagram sekuensial pada Gambar 4.9 menjelaskan pertukaran pesan dalam skenario pengajuan dan verifikasi klaim. Alur diawali dengan permintaan pengajuan oleh \textit{coder} melalui antarmuka web yang mengubah status berkas pada basis data menjadi diajukan. Selanjutnya, aktor \textit{verifier} memuat daftar klaim tertunda melalui server untuk memeriksa keabsahan dokumen dan penetapan kode diagnosis. Dalam skenario persetujuan, verifikator mengirimkan instruksi verifikasi ke server, yang kemudian memvalidasi hak akses peran pengguna, memperbarui status klaim menjadi terverifikasi, mencatat identitas verifikator, dan memanggil pencatat audit untuk menyimpan riwayat transaksi ke basis data. Pada skenario penolakan, verifikator mengirimkan permintaan penolakan beserta alasan tertulis, yang divalidasi oleh server sebelum status klaim diperbarui menjadi ditolak dan catatan alasan penolakan disimpan. Server merespons setiap proses dengan mengirimkan status mutakhir ke antarmuka web agar tampilan data verifikator diperbarui secara konsisten.
+
+
+\subsection{Pengembangan dengan Metode Scrum}
+Pelaksanaan perancangan dan pengembangan sistem dilakukan dengan menerapkan metode Scrum yang terbagi ke dalam kegiatan harian selama masa Praktik Kerja Lapangan di PT Bangga Teknologi Produktif (Karla Bionics). Kerangka kerja dan siklus proses Scrum yang diadopsi diilustrasikan pada Gambar 4.10.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=13.5cm]{figure/diagram/gambar-metode-scrum.png}
+  \caption{Alur Pengembangan dengan Metode Scrum}
+\end{figure}
+
+Berdasarkan Gambar 4.10, alur pengembangan diawali dengan pengumpulan masukan kebutuhan pengguna dan pemangku kepentingan yang dihimpun ke dalam \textit{product backlog}. Item pekerjaan yang diprioritaskan kemudian dipilih melalui pertemuan \textit{sprint planning} dan dialokasikan ke dalam \textit{sprint backlog} untuk dikerjakan dalam siklus \textit{sprint}. Selama siklus berjalan, koordinasi progres dan hambatan dipantau secara berkala melalui pertemuan harian (\textit{daily scrum}). Setiap akhir \textit{sprint} menghasilkan peningkatan produk yang dapat difungsikan (\textit{potentially shippable product increment}), yang kemudian dievaluasi bersama pada sesi \textit{sprint review} serta ditinjau efektivitas proses kerjanya melalui \textit{sprint retrospective} untuk perbaikan siklus berikutnya. Rincian aktivitas harian pengembangan sistem disajikan pada Tabel~\ref{tab:kegiatan-scrum}.
+
+\begin{small}
+\begin{longtable}{|c|>{\raggedright\arraybackslash}p{4.0cm}|>{\raggedright\arraybackslash}p{7.8cm}|}
+\caption{Tabel Pelaksanaan Kegiatan Pengembangan dengan Metode Scrum}\label{tab:kegiatan-scrum}\\
+\hline
+\textbf{Hari} & \textbf{Hari/Tanggal} & \textbf{Kegiatan} \\
+\hline
+\endfirsthead
+\multicolumn{3}{c}%
+{{\tablename\ \thetable\ -- Lanjutan dari halaman sebelumnya}} \\
+\hline
+\textbf{Hari} & \textbf{Hari/Tanggal} & \textbf{Kegiatan} \\
+\hline
+\endhead
+\hline
+\endfoot
+1 & Senin, 22 Juni 2026 & Mempelajari studi kasus awal. \\ \hline
+2 & Selasa, 23 Juni 2026 & Mempelajari studi kasus awal. \\ \hline
+3 & Rabu, 24 Juni 2026 & \textit{Onboarding} pertama dengan tim Karla Bionics. \\ \hline
+4 & Kamis, 25 Juni 2026 & Mencari dan mempelajari jurnal terkait mengenai studi kasus awal. \\ \hline
+5 & Jumat, 26 Juni 2026 & Mencari dan mempelajari jurnal terkait mengenai studi kasus awal. \\ \hline
+6 & Senin, 29 Juni 2026 & Mencari dan mempelajari jurnal terkait mengenai studi kasus awal. \\ \hline
+7 & Selasa, 30 Juni 2026 & \textit{Onboarding} kedua bersama dengan tim Karla Bionics. \\ \hline
+8 & Rabu, 1 Juli 2026 & Mempersiapkan presentasi masalah yang ditemukan pada artikel atau jurnal. \\ \hline
+9 & Kamis, 2 Juli 2026 & Diskusi terkait asumsi awal. \\ \hline
+10 & Jumat, 3 Juli 2026 & Revisi hasil diskusi terkait asumsi awal. \\ \hline
+11 & Senin, 6 Juli 2026 & Kunjungan dan pertemuan (\textit{meeting}) di Rumah Sakit Hasan Sadikin. \\ \hline
+12 & Selasa, 7 Juli 2026 & Menganalisis hasil temuan di Rumah Sakit Hasan Sadikin. \\ \hline
+13 & Rabu, 8 Juli 2026 & Mempersiapkan presentasi hasil temuan di Rumah Sakit Hasan Sadikin. \\ \hline
+14 & Kamis, 9 Juli 2026 & Diskusi terkait hasil temuan di Rumah Sakit Hasan Sadikin. \\ \hline
+15 & Jumat, 10 Juli 2026 & Revisi terkait hasil temuan di Rumah Sakit Hasan Sadikin. \\ \hline
+16 & Senin, 13 Juli 2026 & Mencari jurnal dan artikel terkait masalah-masalah yang ada pada rumah sakit. \\ \hline
+17 & Selasa, 14 Juli 2026 & Mencari jurnal dan artikel terkait masalah-masalah yang ada pada rumah sakit. \\ \hline
+18 & Rabu, 15 Juli 2026 & Diskusi terkait masalah-masalah pada rumah sakit. \\ \hline
+19 & Kamis, 16 Juli 2026 & Mencari dan mempelajari jurnal dan artikel \textit{pending claim} BPJS. \\ \hline
+20 & Jumat, 17 Juli 2026 & Mencari dan mempelajari jurnal dan artikel \textit{pending claim} BPJS. \\ \hline
+21 & Senin, 20 Juli 2026 & Mencari dan mempelajari jurnal dan artikel \textit{pending claim} BPJS. \\ \hline
+22 & Selasa, 21 Juli 2026 & Mempersiapkan presentasi mengenai \textit{pending claim} BPJS. \\ \hline
+23 & Rabu, 22 Juli 2026 & Diskusi permasalahan \textit{pending claim} BPJS. \\ \hline
+24 & Kamis, 23 Juli 2026 & Menganalisis hasil diskusi terkait permasalahan \textit{pending claim} BPJS. \\ \hline
+25 & Jumat, 24 Juli 2026 & Mencari contoh penerapan teknologi informasi pada masalah \textit{pending claim} asuransi. \\ \hline
+26 & Senin, 27 Juli 2026 & Mencari contoh penerapan teknologi informasi pada masalah \textit{pending claim} asuransi. \\ \hline
+27 & Selasa, 28 Juli 2026 & Mencari contoh penerapan teknologi informasi pada masalah \textit{pending claim} asuransi. \\ \hline
+28 & Rabu, 29 Juli 2026 & Mempersiapkan presentasi mengenai penerapan teknologi informasi pada masalah \textit{pending claim} BPJS. \\ \hline
+29 & Kamis, 30 Juli 2026 & Diskusi mengenai penerapan teknologi informasi pada masalah \textit{pending claim} BPJS. \\ \hline
+30 & Jumat, 31 Juli 2026 & Analisis solusi yang berpeluang menyelesaikan masalah. \\ \hline
+31 & Senin, 3 Agustus 2026 & Analisis \textit{framework} dan teknologi yang dapat digunakan. \\ \hline
+32 & Selasa, 4 Agustus 2026 & Pemilihan solusi yang akan dilakukan. \\ \hline
+33 & Rabu, 5 Agustus 2026 & Diskusi pengembangan aplikasi. \\ \hline
+34 & Kamis, 6 Agustus 2026 & Mempersiapkan \textit{development environment}. \\ \hline
+35 & Jumat, 7 Agustus 2026 & Membuat halaman \textit{login}. \\ \hline
+36 & Senin, 10 Agustus 2026 & Membuat halaman untuk menampilkan data. \\ \hline
+37 & Selasa, 11 Agustus 2026 & Membuat halaman untuk menampilkan data. \\ \hline
+38 & Rabu, 12 Agustus 2026 & Membuat halaman untuk menambahkan data dan mensimulasikan \textit{decision support system}. \\ \hline
+39 & Kamis, 13 Agustus 2026 & Membuat halaman untuk menambahkan data dan mensimulasikan \textit{decision support system}. \\ \hline
+40 & Jumat, 14 Agustus 2026 & Membuat halaman untuk menambahkan data dan mensimulasikan \textit{decision support system}. \\ \hline
+41 & Selasa, 18 Agustus 2026 & Integrasi \textit{frontend-backend} dan pengujian (\textit{testing}) fungsionalitas sistem. \\ \hline
+42 & Rabu, 19 Agustus 2026 & Integrasi \textit{frontend-backend} dan pengujian (\textit{testing}) fungsionalitas sistem. \\ \hline
+43 & Kamis, 20 Agustus 2026 & Perbaikan \textit{bug} dan penyelesaian sistem (\textit{finishing system}). \\ \hline
+44 & Jumat, 21 Agustus 2026 & \textit{Offboarding}. \\ \hline
+\end{longtable}
+\end{small}
+
+Berdasarkan rangkaian 44 hari kerja yang disajikan pada Tabel~\ref{tab:kegiatan-scrum}, pelaksanaan kegiatan dibagi ke dalam empat siklus \textit{sprint} berdurasi dua hingga tiga minggu. Setiap akhir \textit{sprint} diakhiri dengan evaluasi hasil (\textit{sprint review}) dan peninjauan proses (\textit{sprint retrospective}). Rincian poin penting serta capaian utama pada setiap akhir \textit{sprint} adalah sebagai berikut:
+
+\subsubsection{Sprint 1: Eksplorasi Studi Kasus dan Penyelarasan Asumsi Awal}
+Siklus \textit{sprint} pertama mencakup aktivitas pada hari ke-1 sampai hari ke-10 (22 Juni sampai 3 Juli 2026). Fokus utama pada fase ini adalah orientasi pengenalan lingkungan kerja bersama tim Karla Bionics serta kajian literatur awal mengenai studi kasus teknologi kesehatan. Poin penting pada akhir \textit{sprint} pertama meliputi:
+\begin{enumerate}
+  \item Terselesaikannya proses \textit{onboarding} dan pemahaman terhadap visi serta misi Karla Bionics dalam inovasi teknologi sosial;
+  \item Teridentifikasinya studi literatur awal mengenai faktor kendala administratif dan medis pada klaim layanan kesehatan;
+  \item Tercapainya kesepakatan bersama mentor industri mengenai rumusan asumsi awal persoalan yang perlu diteliti lebih lanjut;
+  \item Tersusunnya bahan presentasi hasil kajian awal yang telah direvisi berdasarkan masukan tim pembimbing lapangan.
+\end{enumerate}
+
+\subsubsection{Sprint 2: Observasi Lapangan dan Analisis Permasalahan Pending Claim}
+Siklus \textit{sprint} kedua berlangsung pada hari ke-11 sampai hari ke-22 (6 Juli sampai 21 Juli 2026). Fase ini diarahkan pada pengumpulan data primer melalui kunjungan dan diskusi langsung dengan pihak rumah sakit serta penelusuran mendalam terhadap regulasi jaminan kesehatan. Poin penting pada akhir \textit{sprint} kedua meliputi:
+\begin{enumerate}
+  \item Terlaksananya observasi di Rumah Sakit Hasan Sadikin untuk mengamati alur administrasi yang dilalui oleh pasien;
+  \item Terpetakannya sepuluh faktor penyebab \textit{pending claim} BPJS Kesehatan, dengan temuan utama bahwa ketidaktepatan kode diagnosis ICD-10 dan prosedur ICD-9-CM menjadi faktor paling dominan;
+  \item Terselesaikannya analisis komparasi antara temuan lapangan di rumah sakit dan kajian artikel ilmiah terkait kendala koding klaim jaminan kesehatan;
+  \item Tersampaikannya presentasi komprehensif mengenai permasalahan \textit{pending claim} kepada tim Karla Bionics sebagai dasar perumusan kebutuhan solusi.
+\end{enumerate}
+
+\subsubsection{Sprint 3: Perumusan Solusi dan Perancangan Arsitektur Sistem}
+Siklus \textit{sprint} ketiga dilaksanakan pada hari ke-23 sampai hari ke-32 (22 Juli sampai 4 Agustus 2026). Aktivitas difokuskan pada studi komparasi penerapan teknologi informasi dalam mengatasi kendala klaim asuransi serta penentuan arsitektur perangkat lunak yang tepat. Poin penting pada akhir \textit{sprint} ketiga meliputi:
+\begin{enumerate}
+  \item Terpilihnya konsep sistem pendukung keputusan (\textit{decision support system}) berbasis kecerdasan buatan sebagai solusi utama untuk membantu petugas koding;
+  \item Ditetapkannya tumpukan teknologi (\textit{tech stack}) yang mencakup FastAPI sebagai \textit{backend}, React sebagai \textit{frontend}, Celery dan Redis untuk antrean tugas asinkron, Supabase PostgreSQL sebagai basis data, Cloudflare R2 untuk penyimpanan berkas, dan model bahasa besar Google Gemini dengan \textit{fallback} OpenRouter;
+  \item Tersusunnya dokumen spesifikasi kebutuhan perangkat lunak yang mencakup 15 kebutuhan fungsional dan 9 kebutuhan non-fungsional;
+  \item Terdokumentasikannya rancangan arsitektur sistem, diagram \textit{use case}, \textit{activity diagram}, serta \textit{sequence diagram} sebagai acuan implementasi.
+\end{enumerate}
+
+\subsubsection{Sprint 4: Implementasi Prototipe, Integrasi, dan Pengujian Sistem}
+Siklus \textit{sprint} keempat berlangsung pada hari ke-33 sampai hari ke-44 (5 Agustus sampai 21 Agustus 2026). Tahapan ini merupakan fase realisasi kode program, integrasi antarmodul, pengujian kinerja, hingga penutupan masa praktek kerja lapangan. Poin penting pada akhir \textit{sprint} keempat meliputi:
+\begin{enumerate}
+  \item Terkonfigurasinya lingkungan pengembangan (\textit{development environment}) dan terwujudnya modul autentikasi pengguna dengan skema \textit{token} JWT;
+  \item Terbangunnya antarmuka manajemen dokumen resume medis, fitur ekstraksi teks asinkron, dan tampilan verifikasi status pemrosesan;
+  \item Terealisasinya modul rekomendasi koding berbasis kecerdasan buatan, pengambilan keputusan koding mandiri, dan kalkulasi tarif kelompok kasus INA-CBG;
+  \item Terselesaikannya integrasi menyeluruh antara antarmuka web dan layanan API latar belakang;
+  \item Terlaksananya pengujian fungsionalitas sistem menggunakan metode \textit{blackbox testing} yang memastikan seluruh skenario uji berhasil dilalui;
+  \item Terselesaikannya perbaikan galat (\textit{bug fixing}), penyempurnaan akhir sistem (\textit{finishing system}), serta pelaksanaan sesi pelepasan (\textit{offboarding}) bersama tim Karla Bionics.
+\end{enumerate}

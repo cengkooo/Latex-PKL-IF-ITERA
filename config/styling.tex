@@ -8,9 +8,10 @@
 \renewcommand{\thechapter}{\Roman{chapter}}
 \renewcommand{\thesection}{\arabic{chapter}.\arabic{section}}
 \renewcommand{\thesubsection}{\arabic{chapter}.\arabic{section}.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\alph{subsubsection}}
 \renewcommand{\thefigure}{\arabic{chapter}.\arabic{figure}}
 \renewcommand{\thetable}{\arabic{chapter}.\arabic{table}}
-\setcounter{secnumdepth}{2}
+\setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{2}
 
 %------------------------------------------------------------------------------
@@ -33,6 +34,11 @@
   {\normalfont\bfseries\spasisetengah}
   {\makebox[1.27cm][l]{\thesubsection.}}{0pt}{}
 \titlespacing*{\subsection}{0pt}{12pt}{3pt}
+
+\titleformat{\subsubsection}[hang]
+  {\normalfont\spasisetengah}
+  {\thesubsubsection.\ }{0pt}{}
+\titlespacing*{\subsubsection}{0pt}{10pt}{3pt}
 
 % Judul halaman khusus (misal: lembar pengesahan, daftar lain-lain)
 \newcommand{\judulhal}[1]{%
