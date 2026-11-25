@@ -44,52 +44,53 @@
 \contentsline {subsection}{\numberline {3.2.11}Use Case Diagram}{29}{subsection.3.2.11}%
 \contentsline {subsection}{\numberline {3.2.12}Activity Diagram}{30}{subsection.3.2.12}%
 \contentsline {subsection}{\numberline {3.2.13}Sequence Diagram}{30}{subsection.3.2.13}%
-\contentsline {subsection}{\numberline {3.2.14}Metode Scrum}{30}{subsection.3.2.14}%
+\contentsline {subsection}{\numberline {3.2.14}Model Waterfall}{30}{subsection.3.2.14}%
 \contentsline {subsection}{\numberline {3.2.15}Blackbox Testing}{31}{subsection.3.2.15}%
 \contentsline {chapter}{\numberline {IV}Metode Penelitian}{32}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Analisis Permasalahan}{32}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Alur Penyelesaian}{34}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Gambaran Umum Sistem/Aplikasi/Prototype}{37}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Alat dan Bahan}{39}{section.4.4}%
-\contentsline {subsection}{\numberline {4.4.1}Alat}{40}{subsection.4.4.1}%
-\contentsline {subsection}{\numberline {4.4.2}Bahan}{40}{subsection.4.4.2}%
-\contentsline {section}{\numberline {4.5}Metodologi Pengembangan}{40}{section.4.5}%
-\contentsline {subsection}{\numberline {4.5.1}Spesifikasi Kebutuhan Perangkat Lunak}{40}{subsection.4.5.1}%
-\contentsline {subsubsection}{\numberline {a}Kebutuhan Fungsional}{40}{subsubsection.4.5.1.1}%
-\contentsline {subsubsection}{\numberline {b}Kebutuhan Non-Fungsional}{42}{subsubsection.4.5.1.2}%
-\contentsline {subsection}{\numberline {4.5.2}Diagram Rancangan Sistem}{44}{subsection.4.5.2}%
-\contentsline {subsubsection}{\numberline {a}Use Case Diagram}{44}{subsubsection.4.5.2.1}%
-\contentsline {subsubsection}{\numberline {b}Activity Diagram}{45}{subsubsection.4.5.2.2}%
-\contentsline {subsubsection}{\numberline {c}Sequence Diagram}{48}{subsubsection.4.5.2.3}%
-\contentsline {subsection}{\numberline {4.5.3}Pengembangan dengan Metode Scrum}{52}{subsection.4.5.3}%
-\contentsline {subsubsection}{\numberline {a}Sprint 1: Eksplorasi Studi Kasus dan Penyelarasan Asumsi Awal}{55}{subsubsection.4.5.3.1}%
-\contentsline {subsubsection}{\numberline {b}Sprint 2: Observasi Lapangan dan Analisis Permasalahan Pending Claim}{56}{subsubsection.4.5.3.2}%
-\contentsline {subsubsection}{\numberline {c}Sprint 3: Perumusan Solusi dan Perancangan Arsitektur Sistem}{56}{subsubsection.4.5.3.3}%
-\contentsline {subsubsection}{\numberline {d}Sprint 4: Implementasi Prototipe, Integrasi, dan Pengujian Sistem}{57}{subsubsection.4.5.3.4}%
-\contentsline {chapter}{\numberline {V}Hasil Implementasi}{58}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Hasil Implementasi}{58}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}Implementasi Pemodelan Basis Data}{58}{subsection.5.1.1}%
-\contentsline {subsection}{\numberline {5.1.2}Modul Autentikasi dan Manajemen Pengguna}{60}{subsection.5.1.2}%
-\contentsline {subsection}{\numberline {5.1.3}Modul Klaim}{62}{subsection.5.1.3}%
-\contentsline {subsection}{\numberline {5.1.4}Modul Pemrosesan Dokumen Asinkron}{63}{subsection.5.1.4}%
-\contentsline {subsection}{\numberline {5.1.5}Modul Rekomendasi Koding AI}{65}{subsection.5.1.5}%
-\contentsline {subsection}{\numberline {5.1.6}Modul Keputusan Koding}{66}{subsection.5.1.6}%
-\contentsline {subsection}{\numberline {5.1.7}Modul Grouper INA-CBG}{67}{subsection.5.1.7}%
-\contentsline {subsection}{\numberline {5.1.8}Modul Pencarian ICD dan Pemetaan}{68}{subsection.5.1.8}%
-\contentsline {subsection}{\numberline {5.1.9}Modul Verifikasi}{69}{subsection.5.1.9}%
-\contentsline {subsection}{\numberline {5.1.10}Modul Audit dan Metrik}{70}{subsection.5.1.10}%
-\contentsline {subsection}{\numberline {5.1.11}Indikator Koneksi}{72}{subsection.5.1.11}%
-\contentsline {subsection}{\numberline {5.1.12}Hasil Pengujian Blackbox Testing}{73}{subsection.5.1.12}%
-\contentsline {subsubsection}{\numberline {a}Identitas dan Parameter Lingkungan Pengujian}{74}{subsubsection.5.1.12.1}%
-\contentsline {subsubsection}{\numberline {b}Rancangan dan Hasil Kasus Uji (Test Case)}{74}{subsubsection.5.1.12.2}%
-\contentsline {subsubsection}{\numberline {c}Pemetaan Ground Base Terhadap Pengujian Otomatis Python}{77}{subsubsection.5.1.12.3}%
-\contentsline {subsubsection}{\numberline {d}Kesimpulan Hasil Pengujian Blackbox Testing}{78}{subsubsection.5.1.12.4}%
-\contentsline {section}{\numberline {5.2}Evaluasi dan Analisis}{78}{section.5.2}%
-\contentsline {chapter}{\numberline {VI}Kesimpulan dan Saran}{80}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Kesimpulan}{80}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Saran}{81}{section.6.2}%
-\contentsline {chapter}{Referensi}{81}{Item.110}%
-\contentsline {chapter}{Lampiran A. TOR (Term of Reference)}{A-1}{chapter*.31}%
-\contentsline {chapter}{Lampiran B. Log Sheet}{B-1}{chapter*.31}%
-\contentsline {chapter}{Lampiran C. Dokumen Teknik}{C-1}{chapter*.31}%
-\contentsline {chapter}{Lampiran D. Dokumentasi Kegiatan}{D-1}{chapter*.31}%
+\contentsline {section}{\numberline {4.3}Gambaran Umum Sistem/Aplikasi/Prototype}{36}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Alat dan Bahan}{38}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Alat}{38}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Bahan}{38}{subsection.4.4.2}%
+\contentsline {section}{\numberline {4.5}Metodologi Pengembangan}{38}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Spesifikasi Kebutuhan Perangkat Lunak}{39}{subsection.4.5.1}%
+\contentsline {subsubsection}{\numberline {a}Kebutuhan Fungsional}{39}{subsubsection.4.5.1.1}%
+\contentsline {subsubsection}{\numberline {b}Kebutuhan Non-Fungsional}{41}{subsubsection.4.5.1.2}%
+\contentsline {subsection}{\numberline {4.5.2}Diagram Rancangan Sistem}{42}{subsection.4.5.2}%
+\contentsline {subsubsection}{\numberline {a}Use Case Diagram}{42}{subsubsection.4.5.2.1}%
+\contentsline {subsubsection}{\numberline {b}Activity Diagram}{44}{subsubsection.4.5.2.2}%
+\contentsline {subsubsection}{\numberline {c}Sequence Diagram}{47}{subsubsection.4.5.2.3}%
+\contentsline {subsection}{\numberline {4.5.3}Pelaksanaan Pengembangan dengan Model Waterfall}{50}{subsection.4.5.3}%
+\contentsline {subsubsection}{\numberline {a}Fase 1: Analisis Permasalahan dan Kebutuhan Sistem}{53}{subsubsection.4.5.3.1}%
+\contentsline {subsubsection}{\numberline {b}Fase 2: Perancangan Sistem dan Arsitektur Backend}{54}{subsubsection.4.5.3.2}%
+\contentsline {subsubsection}{\numberline {c}Fase 3: Implementasi dan Pengkodean Perangkat Lunak}{54}{subsubsection.4.5.3.3}%
+\contentsline {subsubsection}{\numberline {d}Fase 4: Integrasi dan Pengujian Sistem}{55}{subsubsection.4.5.3.4}%
+\contentsline {subsubsection}{\numberline {e}Fase 5: Penyerahan Prototipe dan Evaluasi PKL}{55}{subsubsection.4.5.3.5}%
+\contentsline {chapter}{\numberline {V}Hasil Implementasi}{56}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Hasil Implementasi}{56}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Implementasi Pemodelan Basis Data dan Migrasi Skema}{56}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Modul Autentikasi dan Manajemen Pengguna}{59}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}Modul Manajemen Klaim}{60}{subsection.5.1.3}%
+\contentsline {subsection}{\numberline {5.1.4}Modul Pemrosesan Dokumen Asinkron}{61}{subsection.5.1.4}%
+\contentsline {subsection}{\numberline {5.1.5}Modul Rekomendasi Koding AI}{63}{subsection.5.1.5}%
+\contentsline {subsection}{\numberline {5.1.6}Modul Keputusan Koding}{64}{subsection.5.1.6}%
+\contentsline {subsection}{\numberline {5.1.7}Modul Grouper INA-CBG}{65}{subsection.5.1.7}%
+\contentsline {subsection}{\numberline {5.1.8}Modul Pencarian ICD dan Pemetaan}{67}{subsection.5.1.8}%
+\contentsline {subsection}{\numberline {5.1.9}Modul Verifikasi}{68}{subsection.5.1.9}%
+\contentsline {subsection}{\numberline {5.1.10}Modul Audit dan Metrik}{69}{subsection.5.1.10}%
+\contentsline {subsection}{\numberline {5.1.11}Indikator Koneksi}{70}{subsection.5.1.11}%
+\contentsline {subsection}{\numberline {5.1.12}Hasil Pengujian Blackbox Testing}{71}{subsection.5.1.12}%
+\contentsline {subsubsection}{\numberline {a}Identitas dan Parameter Lingkungan Pengujian}{72}{subsubsection.5.1.12.1}%
+\contentsline {subsubsection}{\numberline {b}Rancangan dan Hasil Kasus Uji (Test Case)}{72}{subsubsection.5.1.12.2}%
+\contentsline {subsubsection}{\numberline {c}Pemetaan Ground Base Terhadap Pengujian Otomatis Python}{75}{subsubsection.5.1.12.3}%
+\contentsline {subsubsection}{\numberline {d}Kesimpulan Hasil Pengujian Blackbox Testing}{76}{subsubsection.5.1.12.4}%
+\contentsline {section}{\numberline {5.2}Evaluasi dan Analisis}{76}{section.5.2}%
+\contentsline {chapter}{\numberline {VI}Kesimpulan dan Saran}{78}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Kesimpulan}{78}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Saran}{79}{section.6.2}%
+\contentsline {chapter}{Referensi}{79}{Item.98}%
+\contentsline {chapter}{Lampiran A. TOR (Term of Reference)}{A-1}{chapter*.28}%
+\contentsline {chapter}{Lampiran B. Log Sheet}{B-1}{chapter*.28}%
+\contentsline {chapter}{Lampiran C. Dokumen Teknik}{C-1}{chapter*.28}%
+\contentsline {chapter}{Lampiran D. Dokumentasi Kegiatan}{D-1}{chapter*.28}%

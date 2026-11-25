@@ -1,27 +1,84 @@
 %==============================================================================
 % LAMPIRAN D: DOKUMENTASI KEGIATAN
-% [Constraints]:
-% - Foto kegiatan pelaksanaan PKL (offline maupun online/remote).
-% - Dokumentasi visual WAJIB ADA PER MINGGUNYA.
-% - Penomoran gambar: Gambar D.1., Gambar D.2., dst.
 %==============================================================================
 \mulailampiran{D}
 \judullampiran{D}{Dokumentasi Kegiatan}
 
-\pet{Berisi foto-foto kegiatan pelaksanaan PKL. Foto tersebut dapat dalam bentuk foto kegiatan langsung (\textit{offline}) atau \textit{screenshot} kegiatan (jika pelaksanaan PKL secara \textit{remote/online}) atau kombinasi keduanya. Dokumentasi juga dapat dalam bentuk video, berupa link Youtube.}
-
-\petb{Foto dokumentasi wajib ada perminggunya.}
+Bagian ini memuat dokumentasi pelaksanaan kegiatan Praktik Kerja Lapangan (PKL) yang dilaksanakan di PT Bangga Teknologi Produktif (Karla Bionics) selama periode Juni sampai Agustus 2026. Dokumentasi mencakup tahapan awal penugasan, analisis kebutuhan sistem, eksplorasi teknologi, hingga evaluasi penutupan program.
 
 \begin{enumerate}[leftmargin=0.635cm,labelwidth=0.635cm,labelsep=0pt,align=left]
-  \item \textbf{Minggu 1 (<Tanggal>-<Bulan>-<Tahun>)}
+  \item Minggu 1: Rabu, 24 Juni 2026
 \end{enumerate}
 
-\begin{figure}[H]
+\begin{figure}[!ht]
   \centering
-  \includegraphics[width=8.92cm,height=5.01cm]{figure/dokumentasi-kegiatan.png}
-  \caption{Contoh deskripsi kegiatan}
+  \includegraphics[width=7.5cm]{"figure/dokumentasi/Gambar 1.jpeg"}
+  \caption{Sesi Onboarding Perdana Bersama Tim Karla Bionics}\label{fig:dok-onboarding}
 \end{figure}
 
+Sesi orientasi dan pertemuan perdana (onboarding) dilaksanakan bersama jajaran mentor teknis dan manajemen PT Bangga Teknologi Produktif. Pada pertemuan ini, penulis diperkenalkan dengan profil perusahaan, budaya rekayasa perangkat lunak, serta lingkup penugasan peran backend engineer. Pertemuan diakhiri dengan penetapan target capaian Praktik Kerja Lapangan dan konfigurasi awal akses repositori kerja.
+
+\vspace{12pt}
 \begin{enumerate}[leftmargin=0.635cm,labelwidth=0.635cm,labelsep=0pt,align=left,resume]
-  \item \textbf{Minggu 2 (<Tanggal>-<Bulan>-<Tahun>)}
+  \item Minggu 2: Kamis, 2 Juli 2026
 \end{enumerate}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=10.5cm]{"figure/dokumentasi/Gambar 2 (1).jpeg"}
+  \caption{Diskusi Penetapan Asumsi Awal Pengembangan Sistem}\label{fig:dok-asumsi}
+\end{figure}
+
+Penulis mengadakan sesi diskusi teknis bersama pembimbing lapangan untuk membedah dan memvalidasi asumsi awal perancangan sistem INA-CBG Coding Assistant. Pembahasan menitikberatkan pada pemetaan alur operasional klaim BPJS Kesehatan di fasilitas kesehatan rujukan, potensi kendala koding manual, serta kesepakatan batasan arsitektur backend yang aman dalam mengelola data resume medis pasien.
+
+\vspace{12pt}
+\begin{enumerate}[leftmargin=0.635cm,labelwidth=0.635cm,labelsep=0pt,align=left,resume]
+  \item Minggu 4: Rabu, 15 Juli 2026
+\end{enumerate}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=10.5cm]{"figure/dokumentasi/Gambar 5 (1).jpeg"}
+  \caption{Identifikasi dan Diskusi Permasalahan Koding Rumah Sakit}\label{fig:dok-masalah-rs}
+\end{figure}
+
+Sesi telaah permasalahan operasional koding klaim rumah sakit dilakukan berlandaskan hasil observasi lapangan pada fasilitas kesehatan mitra (RSUP Dr. Hasan Sadikin Bandung). Penulis dan tim menganalisis faktor penyebab tingginya angka klaim tertunda (pending claim), meliputi beban kerja staf koder yang padat, risiko ketidaksesuaian kode diagnosis ICD-10, serta urgensi modul validasi otomatis sebelum berkas diajukan ke tahap verifikasi.
+
+\vspace{12pt}
+\begin{enumerate}[leftmargin=0.635cm,labelwidth=0.635cm,labelsep=0pt,align=left,resume]
+  \item Minggu 5: Jumat, 24 Juli 2026
+\end{enumerate}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=7.5cm]{"figure/dokumentasi/Gambar 3 (1).jpeg"}
+  \caption{Studi Komparasi Penerapan TI pada Masalah Klaim Tertunda}\label{fig:dok-studi-ti}
+\end{figure}
+
+Penulis melakukan eksplorasi literatur dan studi komparasi mengenai pemanfaatan teknologi informasi untuk mereduksi status klaim asuransi kesehatan yang tertunda. Pembahasan difokuskan pada pola integrasi model pemrosesan bahasa alami (natural language processing) dan mesin grouper otomatis.
+
+\vspace{12pt}
+\begin{enumerate}[leftmargin=0.635cm,labelwidth=0.635cm,labelsep=0pt,align=left,resume]
+  \item Minggu 6: Senin, 3 Agustus 2026
+\end{enumerate}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=10.5cm]{"figure/dokumentasi/Gambar 4 (1).jpeg"}
+  \caption{Analisis Pemilihan Kerangka Kerja dan Arsitektur Backend}\label{fig:dok-analisis-framework}
+\end{figure}
+
+Sesi evaluasi dan penentuan tumpukan teknologi (technology stack) dilaksanakan guna merancang infrastruktur backend yang modular dan berkinerja tinggi. Penulis memutuskan penggunaan kerangka kerja FastAPI untuk penyediaan REST API asinkron, Celery dan Redis sebagai pengelola antrean pemrosesan dokumen, PostgreSQL Supabase untuk persistensi relasional, serta Cloudflare R2 untuk penyimpanan berkas dokumen terdistribusi.
+
+\vspace{12pt}
+\begin{enumerate}[leftmargin=0.635cm,labelwidth=0.635cm,labelsep=0pt,align=left,resume]
+  \item Minggu 9: Jumat, 21 Agustus 2026
+\end{enumerate}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=10.5cm]{"figure/dokumentasi/Gambar 8.jpeg"}
+  \caption{Sesi Penutupan dan Pelepasan Offboarding PKL}\label{fig:dok-offboarding}
+\end{figure}
+
+Sesi penutupan dan pelepasan (offboarding) Penulis mempresentasikan luaran kerja sistem INA-CBG Coding Assistant, menyerahkan repositori kode sumber dan dokumentasi teknis akhir, serta menerima masukan dan evaluasi dari pembimbing.
